@@ -1,0 +1,689 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "ClimaRaiz API",
+    "description": "Historical climate exposure and user-supplied planting windows. No online ZARC integration, yield prediction, or unvalidated crop-risk scores.",
+    "version": "0.2.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "System"
+        ],
+        "summary": "Health",
+        "operationId": "health_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/municipalities": {
+      "get": {
+        "tags": [
+          "Catalog"
+        ],
+        "summary": "Municipalities",
+        "operationId": "municipalities_api_v1_municipalities_get",
+        "parameters": [
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "maxLength": 100,
+              "default": "",
+              "title": "Search"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 2
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "State"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/crops": {
+      "get": {
+        "tags": [
+          "Catalog"
+        ],
+        "summary": "Crops",
+        "operationId": "crops_api_v1_crops_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/data/status": {
+      "get": {
+        "tags": [
+          "Climate"
+        ],
+        "summary": "Data Status",
+        "operationId": "data_status_api_v1_data_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/climate/series": {
+      "get": {
+        "tags": [
+          "Climate"
+        ],
+        "summary": "Series",
+        "operationId": "series_api_v1_climate_series_get",
+        "parameters": [
+          {
+            "name": "municipality_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Municipality Id"
+            }
+          },
+          {
+            "name": "variable",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "enum": [
+                "precipitation",
+                "temperature_mean",
+                "temperature_max",
+                "temperature_min"
+              ],
+              "type": "string",
+              "title": "Variable"
+            }
+          },
+          {
+            "name": "aggregation",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "enum": [
+                "daily",
+                "monthly",
+                "annual"
+              ],
+              "type": "string",
+              "default": "annual",
+              "title": "Aggregation"
+            }
+          },
+          {
+            "name": "start_year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 2100,
+              "minimum": 1900,
+              "default": 2001,
+              "title": "Start Year"
+            }
+          },
+          {
+            "name": "end_year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 2100,
+              "minimum": 1900,
+              "default": 2025,
+              "title": "End Year"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Offset"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 10000,
+              "minimum": 1,
+              "default": 1000,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/climate/trends": {
+      "get": {
+        "tags": [
+          "Climate"
+        ],
+        "summary": "Trends",
+        "operationId": "trends_api_v1_climate_trends_get",
+        "parameters": [
+          {
+            "name": "municipality_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Municipality Id"
+            }
+          },
+          {
+            "name": "start_year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 2100,
+              "minimum": 1900,
+              "default": 2001,
+              "title": "Start Year"
+            }
+          },
+          {
+            "name": "end_year",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 2100,
+              "minimum": 1900,
+              "default": 2025,
+              "title": "End Year"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/planting/analyses": {
+      "post": {
+        "tags": [
+          "Planting"
+        ],
+        "summary": "Create Analysis",
+        "operationId": "create_analysis_api_v1_planting_analyses_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlantingRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/planting/analyses/{analysis_id}": {
+      "get": {
+        "tags": [
+          "Planting"
+        ],
+        "summary": "Analysis",
+        "operationId": "analysis_api_v1_planting_analyses__analysis_id__get",
+        "parameters": [
+          {
+            "name": "analysis_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Analysis Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/planting/analyses/{analysis_id}/dates/{planting_date}": {
+      "get": {
+        "tags": [
+          "Planting"
+        ],
+        "summary": "Analysis Date",
+        "operationId": "analysis_date_api_v1_planting_analyses__analysis_id__dates__planting_date__get",
+        "parameters": [
+          {
+            "name": "analysis_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Analysis Id"
+            }
+          },
+          {
+            "name": "planting_date",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "Planting Date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/planting/analyses/{analysis_id}/dates/{planting_date}/phases": {
+      "get": {
+        "tags": [
+          "Planting"
+        ],
+        "summary": "Phases",
+        "operationId": "phases_api_v1_planting_analyses__analysis_id__dates__planting_date__phases_get",
+        "parameters": [
+          {
+            "name": "analysis_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Analysis Id"
+            }
+          },
+          {
+            "name": "planting_date",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "title": "Planting Date"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HistoricalPeriod": {
+        "properties": {
+          "start_year": {
+            "type": "integer",
+            "maximum": 2100.0,
+            "minimum": 1900.0,
+            "title": "Start Year",
+            "default": 2001
+          },
+          "end_year": {
+            "type": "integer",
+            "maximum": 2100.0,
+            "minimum": 1900.0,
+            "title": "End Year",
+            "default": 2025
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "HistoricalPeriod"
+      },
+      "PlantingRequest": {
+        "properties": {
+          "municipality_id": {
+            "type": "integer",
+            "title": "Municipality Id",
+            "default": 2504009
+          },
+          "crop_id": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Crop Id",
+            "description": "Numeric crop ID returned by GET /api/v1/crops."
+          },
+          "production_system": {
+            "type": "string",
+            "const": "rainfed",
+            "title": "Production System",
+            "default": "rainfed"
+          },
+          "planting_year": {
+            "type": "integer",
+            "maximum": 2100.0,
+            "minimum": 2000.0,
+            "title": "Planting Year"
+          },
+          "historical_period": {
+            "$ref": "#/components/schemas/HistoricalPeriod"
+          },
+          "cycle_days": {
+            "type": "integer",
+            "maximum": 365.0,
+            "minimum": 1.0,
+            "title": "Cycle Days",
+            "description": "User-selected scenario duration; not a validated crop profile."
+          },
+          "phases": {
+            "items": {
+              "$ref": "#/components/schemas/ScenarioPhase"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Phases"
+          },
+          "check_windows": {
+            "items": {
+              "$ref": "#/components/schemas/ScenarioPhase"
+            },
+            "type": "array",
+            "maxItems": 20,
+            "title": "Check Windows",
+            "description": "Optional rule-evaluation windows; inclusive cycle-day offsets may overlap, e.g. pollination within flowering. Not validated crop phenology."
+          },
+          "daily_mean_threshold_c": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 60.0,
+                "minimum": -50.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Daily Mean Threshold C",
+            "description": "Optional descriptive threshold for daily mean temperature. Not a crop stress limit."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "crop_id",
+          "planting_year",
+          "cycle_days"
+        ],
+        "title": "PlantingRequest"
+      },
+      "ScenarioPhase": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{0,49}$",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "start_day": {
+            "type": "integer",
+            "maximum": 364.0,
+            "minimum": 0.0,
+            "title": "Start Day"
+          },
+          "end_day": {
+            "type": "integer",
+            "maximum": 364.0,
+            "minimum": 0.0,
+            "title": "End Day"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "start_day",
+          "end_day"
+        ],
+        "title": "ScenarioPhase"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

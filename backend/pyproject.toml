@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "climaraiz"
+version = "0.2.0"
+description = "Traceable historical climate analysis and planting-window exploration"
+requires-python = ">=3.9"
+dependencies = ["fastapi>=0.115,<0.129", "uvicorn>=0.30,<0.40", "pandas>=2.2,<3", "numpy>=1.26,<3", "scipy>=1.12,<2", "statsmodels>=0.14,<0.15", "pymannkendall==1.4.3"]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<9", "httpx>=0.27,<0.29"]
+
+[tool.setuptools.packages.find]
+include = ["climaraiz*"]
+
+[tool.setuptools.package-data]
+climaraiz = ["static/*", "config/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

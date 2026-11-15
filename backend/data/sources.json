@@ -1,0 +1,4 @@
+{
+  "precipitation": "sources/g4.areaAvgTimeSeries.M2T1NXFLX_5_12_4_PRECTOTCORR.20000101-20251231.36W_7S_35W_7S.csv",
+  "temperature_mean": "sources/g4.areaAvgTimeSeries.M2SDNXSLV_5_12_4_T2MMEAN.20000101-20251231.36W_7S_35W_7S.csv"
+}

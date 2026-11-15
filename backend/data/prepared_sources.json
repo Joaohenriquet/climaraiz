@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "data_file": "climate_daily.csv",
+  "data_sha256": "cf14b55b58fa6ba55fa5e69e7537dbee4ffa952c05ee960e7294ed5d9422d07a",
+  "sources": {
+    "precipitation": {
+      "provider": "NASA",
+      "dataset": "MERRA-2 / Giovanni",
+      "product": "M2T1NXFLX_5_12_4_PRECTOTCORR",
+      "original_filename": "g4.areaAvgTimeSeries.M2T1NXFLX_5_12_4_PRECTOTCORR.20000101-20251231.36W_7S_35W_7S.csv",
+      "sha256": "79a0a6b1e970134bdfa22c29e8a0518ad5e793e3e9916cb9cb56651032c259e2",
+      "metadata": {
+        "Title": "Time Series, Area-Averaged of Bias corrected total surface precipitation, time average hourly 0.5 x 0.625 (hourly)",
+        "User Start Date": "2000-01-01T00:00:00Z",
+        "User End Date": "2025-12-31T23:59:59Z",
+        "User Bounding Box": "-36,-7.35,-35.75,-7.1",
+        "Data Bounding Box": "-35.625,-7,-35.625,-7",
+        "URL to Reproduce Results": "https://giovanni.gsfc.nasa.gov/giovanni/#service=ArAvTs&starttime=2000-01-01T00:00:00Z&endtime=2025-12-31T23:59:59Z&bbox=-36,-7.35,-35.75,-7.1&data=M2T1NXFLX_5_12_4_PRECTOTCORR(units%3Dmm%2Fhr)&dataKeyword=Bias%20corrected%20total%20surface%20precipitation&portal=GIOVANNI&format=json",
+        "Fill Value (mean_M2T1NXFLX_5_12_4_PRECTOTCORR)": "1000000000000000"
+      },
+      "source_unit": "mm/hr",
+      "daily_unit": "mm/day",
+      "source_resolution": "hourly",
+      "daily_boundary": "UTC 00:00–24:00",
+      "timezone": "UTC",
+      "actual_bbox": [
+        -35.625,
+        -7.0,
+        -35.625,
+        -7.0
+      ],
+      "expected_local_bbox": [
+        -35.625,
+        -7.0,
+        -35.625,
+        -7.0
+      ],
+      "scope": "regional_grid_cell",
+      "usable_for_municipality": true,
+      "raw_record_count": 227928,
+      "input_was_sorted": false,
+      "invalid_values": 0,
+      "missing_timestamps": 0,
+      "daily_record_count": 9497,
+      "incomplete_days": 0,
+      "start_date": "2000-01-01",
+      "end_date": "2025-12-31",
+      "aggregation_method": "sum of 24 hourly rates multiplied by one hour"
+    },
+    "temperature_mean": {
+      "provider": "NASA",
+      "dataset": "MERRA-2 / Giovanni",
+      "product": "M2SDNXSLV_5_12_4_T2MMEAN",
+      "original_filename": "g4.areaAvgTimeSeries.M2SDNXSLV_5_12_4_T2MMEAN.20000101-20251231.36W_7S_35W_7S.csv",
+      "sha256": "7b13b0abaf75d6d2123b20fd1fe984ef7751e25c8ad76a66838c0985ca5ff6a1",
+      "metadata": {
+        "Title": "Time Series, Area-Averaged of 2-meter air temperature - daily mean daily 0.5 x 0.625 (daily)",
+        "User Start Date": "2000-01-01T00:00:00Z",
+        "User End Date": "2025-12-31T23:59:59Z",
+        "User Bounding Box": "-36,-7.35,-35.75,-7.1",
+        "Data Bounding Box": "-35.625,-7,-35.625,-7",
+        "URL to Reproduce Results": "https://giovanni.gsfc.nasa.gov/giovanni/#service=ArAvTs&starttime=2000-01-01T00:00:00Z&endtime=2025-12-31T23:59:59Z&bbox=-36,-7.35,-35.75,-7.1&data=M2SDNXSLV_5_12_4_T2MMEAN(units%3DC)&portal=GIOVANNI&format=json",
+        "Fill Value (mean_M2SDNXSLV_5_12_4_T2MMEAN)": "1000000000000000"
+      },
+      "source_unit": "C",
+      "daily_unit": "degC",
+      "source_resolution": "daily",
+      "daily_boundary": "UTC 00:00–24:00",
+      "timezone": "UTC",
+      "actual_bbox": [
+        -35.625,
+        -7.0,
+        -35.625,
+        -7.0
+      ],
+      "expected_local_bbox": [
+        -35.625,
+        -7.0,
+        -35.625,
+        -7.0
+      ],
+      "scope": "regional_grid_cell",
+      "usable_for_municipality": true,
+      "raw_record_count": 9497,
+      "input_was_sorted": true,
+      "invalid_values": 0,
+      "missing_timestamps": 0,
+      "daily_record_count": 9497,
+      "incomplete_days": 0,
+      "start_date": "2000-01-01",
+      "end_date": "2025-12-31",
+      "aggregation_method": "daily mean as exported"
+    }
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "version": "user-windows-2026-11-15-v4-scenario",
+  "source": "Planting windows supplied by the user, described as collected from ZARC",
+  "verification_status": "user_supplied_not_independently_verified",
+  "production_system": "rainfed",
+  "municipality_id": 2504009,
+  "crops": [
+    {
+      "id": 1,
+      "name": "Milho",
+      "scientific_name": "Zea mays",
+      "window_start": "04-21",
+      "window_end": "05-20",
+      "climate_checks": [
+        {
+          "type": "heat_days",
+          "phase": "pollination",
+          "variable": "T2M_MEAN",
+          "threshold_c": 33,
+          "status": "exploratory_daily_mean",
+          "description": "Count daily means strictly above 33 degC during the supplied pollination window; not a Tmax or crop-damage assessment.",
+          "include_in_assessment": true,
+          "source_id": null
+        },
+        {
+          "type": "dry_spell",
+          "phase": "flowering",
+          "variable": "PRECTOTCORR",
+          "rain_below_mm": 1,
+          "min_consecutive_days": 5,
+          "status": "exploratory",
+          "description": "Longest run below 1 mm/day; a scenario event is a run of at least five days, not confirmed crop damage.",
+          "include_in_assessment": true,
+          "source_id": "funceme_dry_spell"
+        },
+        {
+          "type": "rainfall_total",
+          "phase": "cycle",
+          "variable": "PRECTOTCORR",
+          "min_mm": 500,
+          "max_mm": null,
+          "status": "exploratory_rainfall_benchmark",
+          "description": "Whole-cycle gross rainfall compared with an explicit scenario benchmark; does not establish crop water sufficiency.",
+          "include_in_assessment": true,
+          "source_id": "embrapa_corn_water"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Feijão-preto",
+      "scientific_name": "Phaseolus vulgaris",
+      "window_start": "04-21",
+      "window_end": "05-20",
+      "climate_checks": [
+        {
+          "type": "heat_days",
+          "phase": "flowering",
+          "variable": "T2M_MEAN",
+          "threshold_c": 30,
+          "status": "exploratory_daily_mean",
+          "description": "Count daily means strictly above 30 degC in the supplied flowering window; exploratory, not validated crop damage.",
+          "include_in_assessment": true,
+          "source_id": "embrapa_beans_temperature"
+        },
+        {
+          "type": "cold_days",
+          "phase": "flowering",
+          "variable": "T2M_MEAN",
+          "threshold_c": 12,
+          "status": "exploratory_daily_mean",
+          "description": "Count daily means strictly below 12 degC; daily minima are not available.",
+          "include_in_assessment": true,
+          "source_id": "embrapa_beans_temperature"
+        },
+        {
+          "type": "dry_spell",
+          "phase": "flowering",
+          "variable": "PRECTOTCORR",
+          "rain_below_mm": 1,
+          "min_consecutive_days": 5,
+          "status": "exploratory",
+          "description": "Longest run below 1 mm/day; a scenario event is a run of at least five days, not confirmed crop damage.",
+          "include_in_assessment": true,
+          "source_id": "funceme_dry_spell"
+        },
+        {
+          "type": "rainfall_total",
+          "phase": "cycle",
+          "variable": "PRECTOTCORR",
+          "min_mm": 300,
+          "max_mm": null,
+          "status": "exploratory_rainfall_benchmark",
+          "description": "Whole-cycle gross rainfall compared with an explicit scenario benchmark; does not establish crop water sufficiency.",
+          "include_in_assessment": true,
+          "source_id": "embrapa_beans_climate"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Girassol",
+      "scientific_name": "Helianthus annuus",
+      "window_start": "04-11",
+      "window_end": "05-10",
+      "climate_checks": [
+        {
+          "type": "temperature_mean_peak",
+          "phase": "flowering",
+          "variable": "T2M_MEAN",
+          "status": "descriptive",
+          "description": "Highest daily mean during the supplied flowering window; not the highest daily maximum.",
+          "include_in_assessment": false,
+          "source_id": null
+        },
+        {
+          "type": "dry_spell",
+          "phase": "flowering",
+          "variable": "PRECTOTCORR",
+          "rain_below_mm": 1,
+          "min_consecutive_days": 5,
+          "status": "exploratory",
+          "description": "Longest run below 1 mm/day; a scenario event is a run of at least five days, not confirmed crop damage.",
+          "include_in_assessment": true,
+          "source_id": "funceme_dry_spell"
+        },
+        {
+          "type": "rainfall_total",
+          "phase": "cycle",
+          "variable": "PRECTOTCORR",
+          "min_mm": 500,
+          "max_mm": null,
+          "status": "exploratory_rainfall_benchmark",
+          "description": "Whole-cycle gross rainfall compared with an explicit scenario benchmark; does not establish crop water sufficiency.",
+          "include_in_assessment": true,
+          "source_id": "embrapa_sunflower_water"
+        }
+      ]
+    }
+  ],
+  "assessment": {
+    "method": "all_included_checks_without_events",
+    "output": "scenario_criteria_met_pct",
+    "missing_data_policy": "exclude_incomplete_year",
+    "missing_phase_policy": "report_unavailable",
+    "status": "exploratory"
+  },
+  "sources": {
+    "funceme_dry_spell": {
+      "url": "https://www.funceme.br/?p=843",
+      "application": "Operational dry-spell definition, not a universal crop-damage threshold."
+    },
+    "embrapa_corn_water": {
+      "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/908225/1/doc119.pdf",
+      "application": "Water-demand reference used to propose a gross-rainfall scenario benchmark, not crop water sufficiency."
+    },
+    "embrapa_beans_climate": {
+      "url": "https://www.embrapa.br/web/agencia-de-informacao-tecnologica/cultivos/feijao/pre-producao/clima",
+      "application": "Approximate cycle precipitation reference; not independently validated for a local cultivar."
+    },
+    "embrapa_beans_temperature": {
+      "url": "https://www.atermaisdigital.cnptia.embrapa.br/web/feijao/clima",
+      "application": "Temperature reference operationalized as exploratory daily-mean checks."
+    },
+    "embrapa_sunflower_water": {
+      "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1156957/1/ETC-2-com-ISSN-RNPG-2023.pdf",
+      "application": "Water-demand reference used to propose a gross-rainfall scenario benchmark, not crop water sufficiency."
+    }
+  }
+}
