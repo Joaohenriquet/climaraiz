@@ -1,0 +1,337 @@
+@import "tailwindcss";
+
+/* ══════════════════════════════════════════════════════════════
+   CLIMA RAIZ — DESIGN SYSTEM  v1.0
+   ══════════════════════════════════════════════════════════════
+
+   Layers
+   ───────────────────────────────────────────────────────────
+   1. Primitive tokens  — raw palette (never use directly in UI)
+   2. Typography tokens — family, 12 roles, weights 400–700
+   3. Semantic tokens   — surface/text/brand/status per theme
+   4. Tailwind bridge   — @theme inline → utility generation
+   5. Composite classes — .type-* (size + weight + lh bundled)
+   6. Base reset        — body defaults
+
+   Naming conventions
+   ───────────────────────────────────────────────────────────
+   --cr-*          primitive tokens  (cr = Clima Raiz)
+   --<noun>        semantic tokens   (no prefix — theme-aware)
+   --color-*       Tailwind bridge   (registered via @theme)
+   .type-*         typography roles  (composite utility class)
+
+   ══════════════════════════════════════════════════════════════ */
+
+
+/* ── 1. PRIMITIVE TOKENS ─────────────────────────────────────── */
+:root {
+
+  /* Brand Green — 8 steps: brand-dark (#1b4132) → green-50 (#f0fdf4) */
+  --cr-brand-dark:   #1b4132;
+  --cr-green-800:    #166534;
+  --cr-green-700:    #15803d;
+  --cr-green-600:    #16a34a;
+  --cr-green-500:    #22c55e;
+  --cr-green-300:    #86efac;
+  --cr-green-100:    #dcfce7;
+  --cr-green-50:     #f0fdf4;
+
+  /* Neutral — 7 steps: gray-900 (#111827) → white */
+  --cr-gray-900:     #111827;
+  --cr-gray-700:     #374151;
+  --cr-gray-500:     #6b7280;
+  --cr-gray-400:     #9ca3af;
+  --cr-gray-300:     #d1d5db;
+  --cr-gray-100:     #f3f4f6;
+  --cr-white:        #ffffff;
+
+  /* Amber — 4 steps: atenção e alertas */
+  --cr-amber-800:    #92400e;
+  --cr-amber-500:    #f59e0b;
+  --cr-amber-200:    #fde68a;
+  --cr-amber-50:     #fffbeb;
+
+  /* Blue — 3 steps: precipitação e dados hídricos */
+  --cr-blue-700:     #1d4ed8;
+  --cr-blue-400:     #60a5fa;
+  --cr-blue-100:     #dbeafe;
+
+  /* Red — 2 steps: erros e severidade alta */
+  --cr-red-700:      #b91c1c;
+  --cr-red-100:      #fee2e2;
+
+  /* Overlays */
+  --cr-overlay-white-10: rgba(255,255,255,0.10);
+  --cr-overlay-white-85: rgba(255,255,255,0.85);
+  --cr-overlay-black-30: rgba(0,0,0,0.30);
+}
+
+
+/* ── 2. TYPOGRAPHY TOKENS ────────────────────────────────────── */
+:root {
+  --cr-font: 'Inter', system-ui, sans-serif;
+
+  /* Weight scale */
+  --cr-fw-regular:  400;
+  --cr-fw-medium:   500;
+  --cr-fw-semibold: 600;
+  --cr-fw-bold:     700;
+
+  /* 12 roles — each exposes: -fs (size) · -fw (weight) · -lh (line-height)
+     text-label is the only role with letter-spacing (-ls).          */
+
+  /* text-micro — 8px / Regular */
+  --cr-type-micro-fs:  8px;   --cr-type-micro-fw:  var(--cr-fw-regular);  --cr-type-micro-lh:  1.4;
+
+  /* text-label — 10px / Medium · +0.8px ls → tags, axis labels  */
+  --cr-type-label-fs: 10px;   --cr-type-label-fw:  var(--cr-fw-medium);   --cr-type-label-lh:  1.4;  --cr-type-label-ls: 0.8px;
+
+  /* text-caption — 11px / Regular */
+  --cr-type-caption-fs: 11px; --cr-type-caption-fw: var(--cr-fw-regular); --cr-type-caption-lh: 1.5;
+
+  /* text-xs — 12px / Regular */
+  --cr-type-xs-fs:    12px;   --cr-type-xs-fw:     var(--cr-fw-regular);  --cr-type-xs-lh:     1.5;
+
+  /* text-sm — 13px / Regular */
+  --cr-type-sm-fs:    13px;   --cr-type-sm-fw:     var(--cr-fw-regular);  --cr-type-sm-lh:     1.5;
+
+  /* text-body — 14px / Regular */
+  --cr-type-body-fs:  14px;   --cr-type-body-fw:   var(--cr-fw-regular);  --cr-type-body-lh:   1.6;
+
+  /* text-body-strong — 14px / Semibold */
+  --cr-type-bodys-fs: 14px;   --cr-type-bodys-fw:  var(--cr-fw-semibold); --cr-type-bodys-lh:  1.6;
+
+  /* text-base — 16px / Regular */
+  --cr-type-base-fs:  16px;   --cr-type-base-fw:   var(--cr-fw-regular);  --cr-type-base-lh:   1.6;
+
+  /* text-base-strong — 16px / Semibold */
+  --cr-type-bases-fs: 16px;   --cr-type-bases-fw:  var(--cr-fw-semibold); --cr-type-bases-lh:  1.6;
+
+  /* text-lg — 18px / Semibold */
+  --cr-type-lg-fs:    18px;   --cr-type-lg-fw:     var(--cr-fw-semibold); --cr-type-lg-lh:     1.4;
+
+  /* text-heading — 22px / Bold */
+  --cr-type-hdg-fs:   22px;   --cr-type-hdg-fw:    var(--cr-fw-bold);     --cr-type-hdg-lh:    1.3;
+
+  /* text-display — 28px / Bold */
+  --cr-type-dsp-fs:   28px;   --cr-type-dsp-fw:    var(--cr-fw-bold);     --cr-type-dsp-lh:    1.2;
+}
+
+
+/* ── 3. SEMANTIC TOKENS ──────────────────────────────────────── */
+
+/* Light (default — script fallback is 'light')
+   bg: green-50 · surface: white · text: gray scale · brand: green-600 */
+:root,
+[data-theme="light"] {
+  --background:        var(--cr-green-50);
+  --surface:           var(--cr-white);
+  --surface-elevated:  var(--cr-gray-100);
+  --border:            var(--cr-green-100);
+
+  --text-primary:      var(--cr-gray-900);
+  --text-secondary:    var(--cr-gray-700);
+  --text-muted:        var(--cr-gray-500);
+
+  --brand:             var(--cr-green-600);
+  --brand-hover:       var(--cr-green-700);
+  --brand-subtle:      var(--cr-green-100);
+
+  --status-ok:         var(--cr-green-700);
+  --status-warn:       var(--cr-amber-800);
+  --status-danger:     var(--cr-red-700);
+  --status-info:       var(--cr-blue-700);
+
+  --status-ok-bg:      var(--cr-green-100);
+  --status-warn-bg:    var(--cr-amber-50);
+  --status-danger-bg:  var(--cr-red-100);
+  --status-info-bg:    var(--cr-blue-100);
+}
+
+/* Dark — bg: gray-900 · surface: dark-green · brand: green-500 */
+[data-theme="dark"] {
+  --background:        var(--cr-gray-900);
+  --surface:           #1a2e22;
+  --surface-elevated:  var(--cr-brand-dark);
+  --border:            rgba(134,239,172,0.12);
+
+  --text-primary:      var(--cr-white);
+  --text-secondary:    var(--cr-gray-400);
+  --text-muted:        var(--cr-gray-500);
+
+  --brand:             var(--cr-green-500);
+  --brand-hover:       var(--cr-green-600);
+  --brand-subtle:      var(--cr-brand-dark);
+
+  --status-ok:         var(--cr-green-500);
+  --status-warn:       var(--cr-amber-500);
+  --status-danger:     var(--cr-red-700);
+  --status-info:       var(--cr-blue-400);
+
+  --status-ok-bg:      var(--cr-brand-dark);
+  --status-warn-bg:    var(--cr-amber-800);
+  --status-danger-bg:  rgba(185,28,28,0.15);
+  --status-info-bg:    rgba(29,78,216,0.15);
+}
+
+
+/* ── 4. TAILWIND BRIDGE ──────────────────────────────────────── */
+@theme inline {
+  /* Font */
+  --font-sans: var(--cr-font);
+
+  /* Semantic color utilities */
+  --color-background:        var(--background);
+  --color-surface:           var(--surface);
+  --color-surface-elevated:  var(--surface-elevated);
+  --color-border:            var(--border);
+
+  --color-text-primary:      var(--text-primary);
+  --color-text-secondary:    var(--text-secondary);
+  --color-text-muted:        var(--text-muted);
+
+  --color-brand:             var(--brand);
+  --color-brand-hover:       var(--brand-hover);
+  --color-brand-subtle:      var(--brand-subtle);
+
+  --color-ok:                var(--status-ok);
+  --color-warn:              var(--status-warn);
+  --color-danger:            var(--status-danger);
+  --color-info:              var(--status-info);
+
+  --color-ok-bg:             var(--status-ok-bg);
+  --color-warn-bg:           var(--status-warn-bg);
+  --color-danger-bg:         var(--status-danger-bg);
+  --color-info-bg:           var(--status-info-bg);
+
+  /* Primitive palette utilities (prefix cr-) */
+  --color-cr-brand-dark:     var(--cr-brand-dark);
+  --color-cr-green-800:      var(--cr-green-800);
+  --color-cr-green-700:      var(--cr-green-700);
+  --color-cr-green-600:      var(--cr-green-600);
+  --color-cr-green-500:      var(--cr-green-500);
+  --color-cr-green-300:      var(--cr-green-300);
+  --color-cr-green-100:      var(--cr-green-100);
+  --color-cr-green-50:       var(--cr-green-50);
+
+  --color-cr-gray-900:       var(--cr-gray-900);
+  --color-cr-gray-700:       var(--cr-gray-700);
+  --color-cr-gray-500:       var(--cr-gray-500);
+  --color-cr-gray-400:       var(--cr-gray-400);
+  --color-cr-gray-300:       var(--cr-gray-300);
+  --color-cr-gray-100:       var(--cr-gray-100);
+  --color-cr-white:          var(--cr-white);
+
+  --color-cr-amber-800:      var(--cr-amber-800);
+  --color-cr-amber-500:      var(--cr-amber-500);
+  --color-cr-amber-200:      var(--cr-amber-200);
+  --color-cr-amber-50:       var(--cr-amber-50);
+
+  --color-cr-blue-700:       var(--cr-blue-700);
+  --color-cr-blue-400:       var(--cr-blue-400);
+  --color-cr-blue-100:       var(--cr-blue-100);
+
+  --color-cr-red-700:        var(--cr-red-700);
+  --color-cr-red-100:        var(--cr-red-100);
+
+  --color-overlay-white-10:  var(--cr-overlay-white-10);
+  --color-overlay-white-85:  var(--cr-overlay-white-85);
+  --color-overlay-black-30:  var(--cr-overlay-black-30);
+
+  /* Radius */
+  --radius-sm:   4px;
+  --radius-md:   6px;
+  --radius-lg:   8px;
+  --radius-xl:  12px;
+  --radius-2xl: 16px;
+}
+
+
+/* ── 5. COMPOSITE TYPOGRAPHY CLASSES ─────────────────────────── */
+/* Each class bundles font-size + font-weight + line-height.
+   text-label is the only one with letter-spacing.               */
+
+.type-micro {
+  font-size:   var(--cr-type-micro-fs);
+  font-weight: var(--cr-type-micro-fw);
+  line-height: var(--cr-type-micro-lh);
+}
+
+.type-label {
+  font-size:      var(--cr-type-label-fs);
+  font-weight:    var(--cr-type-label-fw);
+  line-height:    var(--cr-type-label-lh);
+  letter-spacing: var(--cr-type-label-ls);
+}
+
+.type-caption {
+  font-size:   var(--cr-type-caption-fs);
+  font-weight: var(--cr-type-caption-fw);
+  line-height: var(--cr-type-caption-lh);
+}
+
+.type-xs {
+  font-size:   var(--cr-type-xs-fs);
+  font-weight: var(--cr-type-xs-fw);
+  line-height: var(--cr-type-xs-lh);
+}
+
+.type-sm {
+  font-size:   var(--cr-type-sm-fs);
+  font-weight: var(--cr-type-sm-fw);
+  line-height: var(--cr-type-sm-lh);
+}
+
+.type-body {
+  font-size:   var(--cr-type-body-fs);
+  font-weight: var(--cr-type-body-fw);
+  line-height: var(--cr-type-body-lh);
+}
+
+.type-body-strong {
+  font-size:   var(--cr-type-bodys-fs);
+  font-weight: var(--cr-type-bodys-fw);
+  line-height: var(--cr-type-bodys-lh);
+}
+
+.type-base {
+  font-size:   var(--cr-type-base-fs);
+  font-weight: var(--cr-type-base-fw);
+  line-height: var(--cr-type-base-lh);
+}
+
+.type-base-strong {
+  font-size:   var(--cr-type-bases-fs);
+  font-weight: var(--cr-type-bases-fw);
+  line-height: var(--cr-type-bases-lh);
+}
+
+.type-lg {
+  font-size:   var(--cr-type-lg-fs);
+  font-weight: var(--cr-type-lg-fw);
+  line-height: var(--cr-type-lg-lh);
+}
+
+.type-heading {
+  font-size:   var(--cr-type-hdg-fs);
+  font-weight: var(--cr-type-hdg-fw);
+  line-height: var(--cr-type-hdg-lh);
+}
+
+.type-display {
+  font-size:   var(--cr-type-dsp-fs);
+  font-weight: var(--cr-type-dsp-fw);
+  line-height: var(--cr-type-dsp-lh);
+}
+
+
+/* ── 6. BASE RESET ───────────────────────────────────────────── */
+body {
+  font-family:             var(--cr-font);
+  background-color:        var(--background);
+  color:                   var(--text-primary);
+  font-size:               var(--cr-type-body-fs);
+  line-height:             var(--cr-type-body-lh);
+  -webkit-font-smoothing:  antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
