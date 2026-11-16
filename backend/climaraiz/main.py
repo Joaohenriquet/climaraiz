@@ -11,6 +11,7 @@ import uuid
 
 from fastapi import BackgroundTasks, FastAPI, Query, Request
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -61,6 +62,12 @@ def create_app(data_dir=None):
 
     app = FastAPI(title="ClimaRaiz API", version=__version__, lifespan=lifespan,
                   description="Historical climate exposure and user-supplied planting windows. No online ZARC integration, yield prediction, or unvalidated crop-risk scores.")
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["http://localhost:3000", "http://localhost:3001"],
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
     app.state.database = database
     app.state.climate = climate
     app.state.planting = planting
