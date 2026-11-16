@@ -13,9 +13,9 @@ def _longest_run(flags):
     return longest
 
 
-def evaluate_check(rule, windows, frames, planting_date, start_year, end_year):
+def evaluate_check(rule, windows, frames, planting_date, start_year, end_year, cycle_days=None):
     kind, variable = rule["type"], rule["variable"]
-    unit = "days" if kind in ("heat_days", "cold_days", "dry_spell") else "mm" if kind == "rainfall_total" else "degC"
+    unit = "days" if kind in ("heat_days", "cold_days", "dry_spell", "rainy_days") else "mm" if kind == "rainfall_total" else "degC"
     result = {"definition": dict(rule), "phase": rule["phase"], "variable": variable, "unit": unit,
               "status": "unavailable", "reason": None, "summary": None, "yearly_results": [],
               "evaluated_years": 0, "excluded_years": [], "event_years": None,
@@ -26,9 +26,23 @@ def evaluate_check(rule, windows, frames, planting_date, start_year, end_year):
         result["reason"] = "PHASE_WINDOW_NOT_DEFINED"
         return result
     result["window"] = phase.model_dump()
+    duration = phase.end_day - phase.start_day + 1
+    if duration < rule.get("min_window_days", 1):
+        result["reason"] = "WINDOW_TOO_SHORT"
+        return result
+    if rule.get("window_days") is not None and duration != rule["window_days"]:
+        result["reason"] = "WINDOW_DURATION_MISMATCH"
+        return result
+    if rule.get("ends_at_cycle_end"):
+        if cycle_days is None:
+            result["reason"] = "CYCLE_DURATION_REQUIRED"
+            return result
+        if phase.end_day != cycle_days - 1:
+            result["reason"] = "WINDOW_NOT_AT_CYCLE_END"
+            return result
     expected_variable = {"heat_days": "T2M_MEAN", "cold_days": "T2M_MEAN",
                          "temperature_mean_peak": "T2M_MEAN", "dry_spell": "PRECTOTCORR",
-                         "rainfall_total": "PRECTOTCORR"}.get(kind)
+                         "rainfall_total": "PRECTOTCORR", "rainy_days": "PRECTOTCORR"}.get(kind)
     if expected_variable is None or variable != expected_variable:
         result["reason"] = "UNSUPPORTED_CHECK_OR_VARIABLE"
         return result
@@ -43,7 +57,10 @@ def evaluate_check(rule, windows, frames, planting_date, start_year, end_year):
     if kind == "dry_spell" and rule.get("rain_below_mm") is None:
         result["reason"] = "THRESHOLD_NOT_DEFINED"
         return result
-    event_defined = kind in ("heat_days", "cold_days") or (
+    if kind == "rainy_days" and any(rule.get(key) is None for key in ("rain_at_least_mm", "min_days")):
+        result["reason"] = "THRESHOLD_NOT_DEFINED"
+        return result
+    event_defined = kind in ("heat_days", "cold_days", "rainy_days") or (
         kind == "dry_spell" and rule.get("min_consecutive_days") is not None) or (
         kind == "rainfall_total" and any(rule.get(key) is not None for key in ("min_mm", "max_mm")))
     if event_defined:
@@ -51,6 +68,7 @@ def evaluate_check(rule, windows, frames, planting_date, start_year, end_year):
             "heat_days": "at_least_one_daily_mean_strictly_above_threshold",
             "cold_days": "at_least_one_daily_mean_strictly_below_threshold",
             "dry_spell": "longest_dry_spell_at_least_min_consecutive_days",
+            "rainy_days": "at_least_min_days_with_rain_at_or_above_threshold",
             "rainfall_total": "phase_total_strictly_outside_configured_bounds"}.get(kind)
     if variable == "T2M_MEAN":
         result["limitation"] = "Daily means may miss daily maximum/minimum threshold crossings. Zero does not imply absence of extreme heat or cold."
@@ -81,6 +99,9 @@ def evaluate_check(rule, windows, frames, planting_date, start_year, end_year):
             if event_defined:
                 event = ((rule.get("min_mm") is not None and value < rule["min_mm"]) or
                          (rule.get("max_mm") is not None and value > rule["max_mm"]))
+        elif kind == "rainy_days":
+            value = int((series >= rule["rain_at_least_mm"]).sum())
+            event = value >= rule["min_days"]
         else:
             value = float(series.max())
         values.append(value)

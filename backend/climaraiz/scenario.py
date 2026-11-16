@@ -22,10 +22,16 @@ def classify_exposure(assessment):
 
 
 def assess_scenario(checks, start_year, end_year, configuration):
-    included = [check for check in checks if check["definition"].get("include_in_assessment") is True]
+    omitted = [check for check in checks if check["definition"].get("include_in_assessment") is True
+               and check["definition"].get("optional_when_window_missing") is True
+               and check.get("reason") == "PHASE_WINDOW_NOT_DEFINED"]
+    included = [check for check in checks if check["definition"].get("include_in_assessment") is True
+                and check not in omitted]
     result = {"status": "unavailable", "reason": None, "method": configuration.get("method"),
               "evaluated_years": 0, "years_meeting_criteria": None, "years_not_meeting_criteria": None,
               "scenario_criteria_met_pct": None, "excluded_years": [], "yearly_assessment": [],
+              "omitted_optional_checks": [{"type": check["definition"]["type"], "phase": check["phase"],
+                                           "reason": check["reason"]} for check in omitted],
               "included_checks": [{"type": check["definition"]["type"], "phase": check["phase"],
                                    "variable": check["variable"]} for check in included],
               "blocking_checks": [], "validation_status": "exploratory",

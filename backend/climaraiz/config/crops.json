@@ -1,5 +1,5 @@
 {
-  "version": "user-windows-2026-11-15-v4-scenario",
+  "version": "user-windows-2026-11-15-v6-minimum-phase-criteria",
   "source": "Planting windows supplied by the user, described as collected from ZARC",
   "verification_status": "user_supplied_not_independently_verified",
   "production_system": "rainfed",
@@ -43,6 +43,49 @@
           "description": "Whole-cycle gross rainfall compared with an explicit scenario benchmark; does not establish crop water sufficiency.",
           "include_in_assessment": true,
           "source_id": "embrapa_corn_water"
+        },
+        {
+          "type": "dry_spell",
+          "phase": "germination",
+          "variable": "PRECTOTCORR",
+          "rain_below_mm": 1,
+          "min_consecutive_days": 5,
+          "min_window_days": 5,
+          "status": "exploratory",
+          "description": "At least five days below 1 mm/day in the supplied germination window; meteorological exposure only, not measured soil-water deficit or crop damage.",
+          "include_in_assessment": true,
+          "optional_when_window_missing": true,
+          "source_id": "funceme_dry_spell",
+          "agronomic_source_id": "embrapa_phase_basis"
+        },
+        {
+          "type": "dry_spell",
+          "phase": "grain_filling",
+          "variable": "PRECTOTCORR",
+          "rain_below_mm": 1,
+          "min_consecutive_days": 5,
+          "min_window_days": 5,
+          "status": "exploratory",
+          "description": "At least five days below 1 mm/day in the supplied grain_filling window; meteorological exposure only, not measured soil-water deficit or crop damage.",
+          "include_in_assessment": true,
+          "optional_when_window_missing": true,
+          "source_id": "funceme_dry_spell",
+          "agronomic_source_id": "embrapa_phase_basis"
+        },
+        {
+          "type": "rainy_days",
+          "phase": "maturation",
+          "variable": "PRECTOTCORR",
+          "rain_at_least_mm": 1,
+          "min_days": 6,
+          "window_days": 10,
+          "ends_at_cycle_end": true,
+          "status": "exploratory_preharvest_wetness",
+          "description": "At least six rainy days (>=1 mm, not necessarily consecutive) in the final ten cycle days; a pre-harvest scenario, not a diagnosis of grain moisture, disease or loss. The 1 mm cutoff is a product convention; extending the corn reference to beans/sunflower is exploratory.",
+          "include_in_assessment": true,
+          "optional_when_window_missing": true,
+          "source_id": "mapa_corn_preharvest_rain",
+          "agronomic_source_id": "embrapa_phase_basis"
         }
       ]
     },
@@ -94,6 +137,49 @@
           "description": "Whole-cycle gross rainfall compared with an explicit scenario benchmark; does not establish crop water sufficiency.",
           "include_in_assessment": true,
           "source_id": "embrapa_beans_climate"
+        },
+        {
+          "type": "dry_spell",
+          "phase": "germination",
+          "variable": "PRECTOTCORR",
+          "rain_below_mm": 1,
+          "min_consecutive_days": 5,
+          "min_window_days": 5,
+          "status": "exploratory",
+          "description": "At least five days below 1 mm/day in the supplied germination window; meteorological exposure only, not measured soil-water deficit or crop damage.",
+          "include_in_assessment": true,
+          "optional_when_window_missing": true,
+          "source_id": "funceme_dry_spell",
+          "agronomic_source_id": "embrapa_beans_climate"
+        },
+        {
+          "type": "dry_spell",
+          "phase": "grain_filling",
+          "variable": "PRECTOTCORR",
+          "rain_below_mm": 1,
+          "min_consecutive_days": 5,
+          "min_window_days": 5,
+          "status": "exploratory",
+          "description": "At least five days below 1 mm/day in the supplied grain_filling window; meteorological exposure only, not measured soil-water deficit or crop damage.",
+          "include_in_assessment": true,
+          "optional_when_window_missing": true,
+          "source_id": "funceme_dry_spell",
+          "agronomic_source_id": "embrapa_beans_climate"
+        },
+        {
+          "type": "rainy_days",
+          "phase": "maturation",
+          "variable": "PRECTOTCORR",
+          "rain_at_least_mm": 1,
+          "min_days": 6,
+          "window_days": 10,
+          "ends_at_cycle_end": true,
+          "status": "exploratory_preharvest_wetness",
+          "description": "At least six rainy days (>=1 mm, not necessarily consecutive) in the final ten cycle days; a pre-harvest scenario, not a diagnosis of grain moisture, disease or loss. The 1 mm cutoff is a product convention; extending the corn reference to beans/sunflower is exploratory.",
+          "include_in_assessment": true,
+          "optional_when_window_missing": true,
+          "source_id": "mapa_corn_preharvest_rain",
+          "agronomic_source_id": "embrapa_beans_harvest"
         }
       ]
     },
@@ -134,6 +220,49 @@
           "description": "Whole-cycle gross rainfall compared with an explicit scenario benchmark; does not establish crop water sufficiency.",
           "include_in_assessment": true,
           "source_id": "embrapa_sunflower_water"
+        },
+        {
+          "type": "dry_spell",
+          "phase": "germination",
+          "variable": "PRECTOTCORR",
+          "rain_below_mm": 1,
+          "min_consecutive_days": 5,
+          "min_window_days": 5,
+          "status": "exploratory",
+          "description": "At least five days below 1 mm/day in the supplied germination window; meteorological exposure only, not measured soil-water deficit or crop damage.",
+          "include_in_assessment": true,
+          "optional_when_window_missing": true,
+          "source_id": "funceme_dry_spell",
+          "agronomic_source_id": "embrapa_sunflower_phases"
+        },
+        {
+          "type": "dry_spell",
+          "phase": "grain_filling",
+          "variable": "PRECTOTCORR",
+          "rain_below_mm": 1,
+          "min_consecutive_days": 5,
+          "min_window_days": 5,
+          "status": "exploratory",
+          "description": "At least five days below 1 mm/day in the supplied grain_filling window; meteorological exposure only, not measured soil-water deficit or crop damage.",
+          "include_in_assessment": true,
+          "optional_when_window_missing": true,
+          "source_id": "funceme_dry_spell",
+          "agronomic_source_id": "embrapa_sunflower_phases"
+        },
+        {
+          "type": "rainy_days",
+          "phase": "maturation",
+          "variable": "PRECTOTCORR",
+          "rain_at_least_mm": 1,
+          "min_days": 6,
+          "window_days": 10,
+          "ends_at_cycle_end": true,
+          "status": "exploratory_preharvest_wetness",
+          "description": "At least six rainy days (>=1 mm, not necessarily consecutive) in the final ten cycle days; a pre-harvest scenario, not a diagnosis of grain moisture, disease or loss. The 1 mm cutoff is a product convention; extending the corn reference to beans/sunflower is exploratory.",
+          "include_in_assessment": true,
+          "optional_when_window_missing": true,
+          "source_id": "mapa_corn_preharvest_rain",
+          "agronomic_source_id": "embrapa_sunflower_phases"
         }
       ]
     }
@@ -143,7 +272,8 @@
     "output": "scenario_criteria_met_pct",
     "missing_data_policy": "exclude_incomplete_year",
     "missing_phase_policy": "report_unavailable",
-    "status": "exploratory"
+    "status": "exploratory",
+    "optional_window_policy": "omit_absent_optional_windows_and_report_omissions"
   },
   "sources": {
     "funceme_dry_spell": {
@@ -165,6 +295,22 @@
     "embrapa_sunflower_water": {
       "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/1156957/1/ETC-2-com-ISSN-RNPG-2023.pdf",
       "application": "Water-demand reference used to propose a gross-rainfall scenario benchmark, not crop water sufficiency."
+    },
+    "mapa_corn_preharvest_rain": {
+      "url": "https://www.gov.br/agricultura/pt-br/assuntos/riscos-seguro/programa-nacional-de-zoneamento-agricola-de-risco-climatico/portarias/safra-vigente/maranhao/PORTN34.PDF/%40%40download/file",
+      "application": "Corn second-crop Maranhão reference for six rainy days in the final ten-day period. The >=1 mm definition and transfer to other crops are exploratory ClimaRaiz conventions, not local ZARC validation."
+    },
+    "embrapa_phase_basis": {
+      "url": "https://www.alice.cnptia.embrapa.br/bitstream/doc/478760/1/Fisiologiamilho.pdf",
+      "application": "Physiological rationale for water-sensitive corn establishment and filling; does not validate a five-day rainfall threshold as crop damage."
+    },
+    "embrapa_beans_harvest": {
+      "url": "https://www.infoteca.cnptia.embrapa.br/infoteca/bitstream/doc/254606/1/CPAOCIR.TEC.1790.pdf",
+      "application": "Rain after bean maturity can cause field losses; does not validate the six-of-ten-day cutoff."
+    },
+    "embrapa_sunflower_phases": {
+      "url": "https://www.infoteca.cnptia.embrapa.br/bitstream/doc/445797/1/doc059.pdf",
+      "application": "Water-sensitive achene filling and dry-weather harvest maturation; numerical dry/wet cutoffs are exploratory adaptations."
     }
   }
 }

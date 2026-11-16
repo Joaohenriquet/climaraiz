@@ -31,18 +31,7 @@ def main():
                         "/api/v1/climate/series?municipality_id=2504009&variable=precipitation&aggregation=daily&start_year=2001&end_year=2025&limit=2",
                         "/api/v1/climate/trends?municipality_id=2504009&start_year=2001&end_year=2025"]:
                 capture("GET", url)
-            body = {"municipality_id": 2504009, "crop_id": 1, "production_system": "rainfed", "planting_year": 2027,
-                    "historical_period": {"start_year": 2001, "end_year": 2025}, "cycle_days": 120,
-                    "phases": [
-                        {"id": "germinacao", "name": "Germinação", "start_day": 0, "end_day": 14},
-                        {"id": "floracao", "name": "Floração", "start_day": 15, "end_day": 65},
-                        {"id": "enchimento", "name": "Enchimento", "start_day": 66, "end_day": 99},
-                        {"id": "maturacao", "name": "Maturação", "start_day": 100, "end_day": 119}],
-                    "check_windows": [
-                        {"id": "flowering", "phase_id": "floracao", "name": "Illustrative flowering window", "start_day": 40, "end_day": 65},
-                        {"id": "pollination", "phase_id": "floracao", "name": "Illustrative pollination window", "start_day": 45, "end_day": 55},
-                        {"id": "grain_filling", "name": "Illustrative grain-filling window", "start_day": 66, "end_day": 95}],
-                    "daily_mean_threshold_c": None}
+            body = json.loads((Path(__file__).parent / "requests/all_phase_analysis.json").read_text())
             created = capture("POST", "/api/v1/planting/analyses", body)
             url = created["links"]["result"]
             capture("GET", url)
