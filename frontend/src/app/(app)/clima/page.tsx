@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import {
   ComposedChart,
@@ -13,182 +13,107 @@ import {
   ReferenceLine,
   ResponsiveContainer,
 } from 'recharts'
+import Spinner from '@/shared/components/Spinner'
+import { getClimateTrends } from '@/shared/lib/api'
+import type { TrendIndicator, TrendsResponse } from '@/shared/lib/types'
 
-type Tab = 'precip' | 'temp' | 'humidity'
+type Tab = 'precip' | 'temp'
 
-// ─── Data ────────────────────────────────────────────────────────────────────
+const MUNICIPALITY_ID = 2504009
 
-const PRECIP_DATA = [
-  { year: 2001, value: 820  },
-  { year: 2002, value: 680  },
-  { year: 2003, value: 920  },
-  { year: 2004, value: 850  },
-  { year: 2005, value: 1050 },
-  { year: 2006, value: 780  },
-  { year: 2007, value: 900  },
-  { year: 2008, value: 1100 },
-  { year: 2009, value: 830  },
-  { year: 2010, value: 1200 },
-  { year: 2011, value: 920  },
-  { year: 2012, value: 580  },
-  { year: 2013, value: 970  },
-  { year: 2014, value: 1030 },
-  { year: 2015, value: 740  },
-  { year: 2016, value: 880  },
-  { year: 2017, value: 1140 },
-  { year: 2018, value: 850  },
-  { year: 2019, value: 970  },
-  { year: 2020, value: 1060 },
-  { year: 2021, value: 1180 },
-  { year: 2022, value: 920  },
-  { year: 2023, value: 1050 },
-  { year: 2024, value: 1100 },
-  { year: 2025, value: 1150 },
-].map((d, i) => ({ ...d, trend: Math.round(834 + i * 10.12), mean: 956 }))
+interface ChartPoint {
+  year: number
+  value: number
+  trend: number
+  mean: number
+}
 
-const TEMP_DATA = [
-  { year: 2001, value: 27.6 },
-  { year: 2002, value: 27.8 },
-  { year: 2003, value: 27.5 },
-  { year: 2004, value: 28.0 },
-  { year: 2005, value: 27.9 },
-  { year: 2006, value: 28.1 },
-  { year: 2007, value: 27.7 },
-  { year: 2008, value: 28.2 },
-  { year: 2009, value: 28.3 },
-  { year: 2010, value: 27.9 },
-  { year: 2011, value: 28.0 },
-  { year: 2012, value: 28.4 },
-  { year: 2013, value: 28.1 },
-  { year: 2014, value: 28.0 },
-  { year: 2015, value: 28.5 },
-  { year: 2016, value: 28.2 },
-  { year: 2017, value: 28.3 },
-  { year: 2018, value: 28.6 },
-  { year: 2019, value: 28.4 },
-  { year: 2020, value: 28.7 },
-  { year: 2021, value: 28.5 },
-  { year: 2022, value: 28.8 },
-  { year: 2023, value: 28.6 },
-  { year: 2024, value: 28.9 },
-  { year: 2025, value: 29.0 },
-].map((d, i) => ({ ...d, trend: parseFloat((27.72 + i * 0.032).toFixed(2)), mean: 28.1 }))
+function buildChartData(indicator: TrendIndicator): ChartPoint[] {
+  if (!indicator.annual_series || indicator.mean == null) return []
+  return indicator.annual_series.map((d) => ({
+    year: d.year,
+    value: d.value,
+    trend: parseFloat(d.fitted.toFixed(3)),
+    mean: indicator.mean!,
+  }))
+}
 
-const HUMIDITY_DATA = [
-  { year: 2001, value: 60 },
-  { year: 2002, value: 61 },
-  { year: 2003, value: 59 },
-  { year: 2004, value: 60 },
-  { year: 2005, value: 58 },
-  { year: 2006, value: 59 },
-  { year: 2007, value: 60 },
-  { year: 2008, value: 57 },
-  { year: 2009, value: 59 },
-  { year: 2010, value: 61 },
-  { year: 2011, value: 58 },
-  { year: 2012, value: 56 },
-  { year: 2013, value: 58 },
-  { year: 2014, value: 57 },
-  { year: 2015, value: 59 },
-  { year: 2016, value: 56 },
-  { year: 2017, value: 57 },
-  { year: 2018, value: 58 },
-  { year: 2019, value: 55 },
-  { year: 2020, value: 57 },
-  { year: 2021, value: 56 },
-  { year: 2022, value: 55 },
-  { year: 2023, value: 57 },
-  { year: 2024, value: 55 },
-  { year: 2025, value: 54 },
-].map((d, i) => ({ ...d, trend: parseFloat((59.04 - i * 0.12).toFixed(2)), mean: 57.6 }))
+function formatPValue(p: number): string {
+  if (p < 0.001) return '<0,001'
+  return p.toFixed(4).replace('.', ',')
+}
 
-// ─── Tab config ───────────────────────────────────────────────────────────────
+function formatSlope(slope: number, unit: 'mm' | 'degC'): string {
+  const sign = slope > 0 ? '+' : ''
+  if (unit === 'degC') return `${sign}${slope.toFixed(2).replace('.', ',')}°C por década`
+  return `${sign}${slope.toFixed(2).replace('.', ',')} mm por década`
+}
 
 const YEAR_TICKS = [2001, 2005, 2010, 2015, 2020, 2025]
-
-const TAB_CONFIG = {
-  precip: {
-    label: 'Precipitação',
-    chartTitle: 'Precipitação anual',
-    source: '2001–2025 · INMET/ANA',
-    meanBadge: 'Média 956mm',
-    seriesLabel: 'Barras anuais',
-    seriesColor: '#22c55e',
-    trendColor: '#16a34a',
-    meanValue: 956,
-    yDomain: [0, 1200] as [number, number],
-    yTicks: [0, 400, 800, 1200],
-    data: PRECIP_DATA,
-    icon: '/icons/trend-precip.svg',
-    cardBg: '#f0fcf3',
-    cardBorder: '#dcf9e6',
-    bodyColor: '#384051',
-    boldColor: '#111827',
-    trendText: 'A precipitação anual apresentou tendência de aumento de ',
-    trendBold: '+101,24 mm por década (p-valor = 0,0336)',
-    trendSuffix: ', com significância estatística.',
-  },
-  temp: {
-    label: 'Temperatura',
-    chartTitle: 'Temperatura média anual',
-    source: '2001–2025 · INMET/ERA5',
-    meanBadge: 'Média 28,1°C',
-    seriesLabel: 'Série histórica',
-    seriesColor: '#f59e0b',
-    trendColor: '#16a34a',
-    meanValue: 28.1,
-    yDomain: [26.5, 30] as [number, number],
-    yTicks: [27, 28, 29],
-    data: TEMP_DATA,
-    icon: '/icons/trend-temp.svg',
-    cardBg: '#fff9e0',
-    cardBorder: '#fef1ca',
-    bodyColor: '#59400d',
-    boldColor: '#b26301',
-    trendText: 'A temperatura média anual apresentou tendência de aquecimento de ',
-    trendBold: '+0,32°C por década (p-valor = 0,0412)',
-    trendSuffix: ', com significância estatística.',
-  },
-  humidity: {
-    label: 'Umidade',
-    chartTitle: 'Umidade relativa anual',
-    source: '2001–2025 · INMET',
-    meanBadge: 'Média 57,6%',
-    seriesLabel: 'Série histórica',
-    seriesColor: '#60a5fa',
-    trendColor: '#16a34a',
-    meanValue: 57.6,
-    yDomain: [52, 64] as [number, number],
-    yTicks: [54, 57, 60],
-    data: HUMIDITY_DATA,
-    icon: '/icons/trend-humidity.svg',
-    cardBg: '#e5f1ff',
-    cardBorder: '#cbe3ff',
-    bodyColor: '#142e6b',
-    boldColor: '#1e5ad7',
-    trendText: 'A umidade relativa apresentou tendência de redução de ',
-    trendBold: '-1,20% por década (p-valor = 0,0892)',
-    trendSuffix: ', sem significância estatística.',
-  },
-} as const
-
-// ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function xTickFormatter(value: number) {
   return YEAR_TICKS.includes(value) ? String(value) : ''
 }
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+function computeDomain(values: number[], variable: 'precip' | 'temp'): {
+  yDomain: [number, number]
+  yTicks: number[]
+} {
+  if (values.length === 0) return { yDomain: [0, 1], yTicks: [0, 1] }
+  const min = Math.min(...values)
+  const max = Math.max(...values)
+  if (variable === 'precip') {
+    const top = Math.ceil(max / 200) * 200
+    return { yDomain: [0, top], yTicks: [0, top / 3, (top / 3) * 2, top].map(Math.round) }
+  }
+  const bot = Math.floor(min - 0.5)
+  const top = Math.ceil(max + 0.5)
+  const mid = parseFloat(((bot + top) / 2).toFixed(1))
+  return { yDomain: [bot, top], yTicks: [bot + 0.5, mid, top - 0.5] }
+}
 
 export default function ClimaPage() {
   const [tab, setTab] = useState<Tab>('precip')
-  const cfg = TAB_CONFIG[tab]
+  const [trends, setTrends] = useState<TrendsResponse | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const tabs: Tab[] = ['precip', 'temp', 'humidity']
+  useEffect(() => {
+    getClimateTrends(MUNICIPALITY_ID)
+      .then(setTrends)
+      .catch(() => setError('Erro ao carregar dados climáticos.'))
+      .finally(() => setLoading(false))
+  }, [])
+
+  const precipInd = trends?.indicators?.precipitation
+  const tempInd = trends?.indicators?.temperature_mean
+
+  const precipData = precipInd?.status === 'available' ? buildChartData(precipInd) : []
+  const tempData = tempInd?.status === 'available' ? buildChartData(tempInd) : []
+
+  const activeData = tab === 'precip' ? precipData : tempData
+  const activeInd = tab === 'precip' ? precipInd : tempInd
+
+  const values = activeData.map((d) => d.value)
+  const { yDomain, yTicks } = computeDomain(values, tab)
+
+  const slope = activeInd?.trend?.slope_per_decade ?? 0
+  const pValue = activeInd?.significance?.p_value ?? 1
+  const significant = pValue < 0.05
+  const slopeText = formatSlope(slope, tab === 'temp' ? 'degC' : 'mm')
+  const pText = `p-valor = ${formatPValue(pValue)}`
+
+  const mean = activeInd?.mean ?? 0
+  const meanBadge =
+    tab === 'precip'
+      ? `Média ${Math.round(mean)}mm`
+      : `Média ${mean.toFixed(1).replace('.', ',')}°C`
+
+  const precip = precipInd
+  const temp = tempInd
 
   return (
     <>
-      {/* Header */}
       <header className="bg-[#1b4132] flex flex-col gap-1 pb-5 pt-4 px-5 shrink-0">
         <span className="text-white text-[17px] font-semibold leading-none">
           Tendências climáticas
@@ -202,209 +127,256 @@ export default function ClimaPage() {
 
       <main className="flex-1 flex flex-col gap-3.5 bg-[#f3f4f6] px-4 py-6 overflow-y-auto">
 
-        {/* Section label */}
-        <p className="text-[#9ca3af] text-[10px] font-medium tracking-[0.5px] uppercase">
-          Resumo das variáveis
-        </p>
-
-        {/* Variable summary cards */}
-        <div className="flex gap-2 w-full">
-          {/* Precipitação */}
-          <div className="bg-white border border-[#e5e7eb] rounded-xl flex flex-col gap-1.5 items-center px-2.5 py-3 flex-1 min-w-0">
-            <div className="bg-[#f0fcf3] rounded-lg p-2 flex items-center justify-center">
-              <Image src="/icons/precip-icon.svg" alt="" width={20} height={20} />
-            </div>
-            <span className="text-[#6b7280] text-[10px] font-medium text-center leading-none">Precipitação</span>
-            <div className="bg-[#f0fcf3] px-1.5 py-0.5 rounded">
-              <span className="text-[#16a34a] text-[9px] font-semibold leading-none">↑ Aumento</span>
-            </div>
-            <span className="text-[#111827] text-base font-bold leading-none">+101,24</span>
-            <span className="text-[#9ca3af] text-[9px] leading-none">mm/déc.</span>
-            <div className="bg-[#f0fcf3] px-1 py-0.5 rounded">
-              <span className="text-[#16a34a] text-[8px] font-medium leading-none">p=0,034</span>
-            </div>
-            <span className="text-[#16a34a] text-[8px] font-medium text-center leading-none">Significativo</span>
-          </div>
-
-          {/* Temperatura */}
-          <div className="bg-white border border-[#e5e7eb] rounded-xl flex flex-col gap-1.5 items-center px-2.5 py-3 flex-1 min-w-0">
-            <div className="bg-[#fff9e0] rounded-lg p-2 flex items-center justify-center">
-              <Image src="/icons/temp-icon.svg" alt="" width={20} height={20} />
-            </div>
-            <span className="text-[#6b7280] text-[10px] font-medium text-center leading-none">Temperatura</span>
-            <div className="bg-[#fff9e0] px-1.5 py-0.5 rounded">
-              <span className="text-[#da8003] text-[9px] font-semibold leading-none">↑ Aquecim.</span>
-            </div>
-            <span className="text-[#111827] text-base font-bold leading-none">+0,32</span>
-            <span className="text-[#9ca3af] text-[9px] leading-none">°C/déc.</span>
-            <div className="bg-[#fff9e0] px-1 py-0.5 rounded">
-              <span className="text-[#da8003] text-[8px] font-medium leading-none">p=0,041</span>
-            </div>
-            <span className="text-[#da8003] text-[8px] font-medium text-center leading-none">Significativo</span>
-          </div>
-
-          {/* Umidade */}
-          <div className="bg-white border border-[#e5e7eb] rounded-xl flex flex-col gap-1.5 items-center px-2.5 py-3 flex-1 min-w-0">
-            <div className="bg-[#e5f1ff] rounded-lg p-2 flex items-center justify-center">
-              <Image src="/icons/humidity-icon.svg" alt="" width={20} height={20} />
-            </div>
-            <span className="text-[#6b7280] text-[10px] font-medium text-center leading-none">Umidade rel.</span>
-            <div className="bg-[#f3f4f6] px-1.5 py-0.5 rounded">
-              <span className="text-[#6b7280] text-[9px] font-semibold leading-none">↓ Redução</span>
-            </div>
-            <span className="text-[#111827] text-base font-bold leading-none">-1,20</span>
-            <span className="text-[#9ca3af] text-[9px] leading-none">%/déc.</span>
-            <div className="bg-[#f3f4f6] px-1 py-0.5 rounded">
-              <span className="text-[#6b7280] text-[8px] font-medium leading-none">p=0,089</span>
-            </div>
-            <span className="text-[#6b7280] text-[8px] font-medium text-center leading-none">Não Sig.</span>
-          </div>
-        </div>
-
-        {/* Section label */}
-        <p className="text-[#9ca3af] text-[10px] font-medium tracking-[0.5px] uppercase">
-          Análise histórica
-        </p>
-
-        {/* Tab bar */}
-        <div className="bg-[#e5e7eb] flex gap-0.5 p-0.5 rounded-lg w-full">
-          {tabs.map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t)}
-              className={[
-                'flex-1 py-1.5 px-2.5 rounded-md text-[11px] leading-none transition-colors',
-                tab === t
-                  ? 'bg-white text-[#111827] font-semibold'
-                  : 'text-[#6b7280] font-medium',
-              ].join(' ')}
-            >
-              {TAB_CONFIG[t].label}
-            </button>
-          ))}
-        </div>
-
-        {/* Chart card */}
-        <div className="bg-white border border-[#e5e7eb] rounded-xl p-3.5 flex flex-col gap-2.5 w-full">
-          {/* Chart header */}
-          <div className="flex items-center justify-between">
-            <div className="flex flex-col gap-0.5">
-              <span className="text-[#111827] text-[13px] font-semibold leading-none">
-                {cfg.chartTitle}
-              </span>
-              <span className="text-[#9ca3af] text-[11px] leading-none">{cfg.source}</span>
-            </div>
-            <div className="bg-[#f3f4f6] px-2 py-1 rounded">
-              <span className="text-[#6b7280] text-[10px] font-medium leading-none">
-                {cfg.meanBadge}
-              </span>
+        {loading ? (
+          <div className="flex-1 flex items-center justify-center py-16">
+            <div className="flex flex-col items-center gap-3">
+              <Spinner />
+              <span className="text-[13px] text-[#6b7280]">Carregando dados climáticos…</span>
             </div>
           </div>
+        ) : error ? (
+          <p className="text-[13px] text-[#c01b1b] bg-[#ffebeb] rounded-lg px-3 py-2">{error}</p>
+        ) : (
+          <>
+            <p className="text-[#9ca3af] text-[10px] font-medium tracking-[0.5px] uppercase">
+              Resumo das variáveis
+            </p>
 
-          {/* Recharts */}
-          <div style={{ height: 140, width: '100%' }}>
-            <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart data={cfg.data} margin={{ top: 4, right: 4, bottom: 16, left: 24 }}>
-                <CartesianGrid vertical={false} stroke="#f3f4f6" strokeWidth={1} />
-                <XAxis
-                  dataKey="year"
-                  tickLine={false}
-                  axisLine={false}
-                  tick={{ fontSize: 8, fill: '#9ca3af' }}
-                  tickFormatter={xTickFormatter}
-                  interval={0}
-                />
-                <YAxis
-                  domain={cfg.yDomain}
-                  ticks={cfg.yTicks}
-                  tickLine={false}
-                  axisLine={false}
-                  tick={{ fontSize: 8, fill: '#9ca3af' }}
-                  width={26}
-                />
-                <ReferenceLine
-                  y={cfg.meanValue}
-                  stroke="rgba(156,163,175,0.6)"
-                  strokeWidth={1}
-                  strokeDasharray="4 3"
-                />
-
-                {tab === 'precip' ? (
-                  <Bar
-                    dataKey="value"
-                    fill={cfg.seriesColor}
-                    radius={[2, 2, 0, 0]}
-                    maxBarSize={8}
-                  />
-                ) : (
-                  <Area
-                    dataKey="value"
-                    stroke={cfg.seriesColor}
-                    strokeWidth={2}
-                    fill={cfg.cardBg}
-                    dot={false}
-                    activeDot={{ r: 3 }}
-                  />
-                )}
-
-                <Line
-                  dataKey="trend"
-                  stroke={cfg.trendColor}
-                  strokeWidth={2}
-                  dot={false}
-                  activeDot={false}
-                />
-              </ComposedChart>
-            </ResponsiveContainer>
-          </div>
-
-          {/* Legend */}
-          <div className="flex gap-3.5 items-center">
-            <div className="flex items-center gap-1">
-              <div
-                className="size-2 rounded-sm"
-                style={{ backgroundColor: cfg.seriesColor }}
+            <div className="flex gap-2 w-full">
+              <SummaryCard
+                iconSrc="/icons/precip-icon.svg"
+                label="Precipitação"
+                slope={precip?.trend?.slope_per_decade ?? 0}
+                unit="mm"
+                pValue={precip?.significance?.p_value ?? 1}
+                bg="#f0fcf3"
+                border="#dcf9e6"
+                badgeBg="#f0fcf3"
+                slopeColor="#16a34a"
+                direction="up"
               />
-              <span className="text-[#6b7280] text-[9px] leading-none">
-                {cfg.seriesLabel}
-              </span>
+              <SummaryCard
+                iconSrc="/icons/temp-icon.svg"
+                label="Temperatura"
+                slope={temp?.trend?.slope_per_decade ?? 0}
+                unit="°C"
+                pValue={temp?.significance?.p_value ?? 1}
+                bg="#fff9e0"
+                border="#fef1ca"
+                badgeBg="#fff9e0"
+                slopeColor="#da8003"
+                direction="up"
+              />
             </div>
-            <div className="flex items-center gap-1">
-              <div className="h-0.5 w-3.5 rounded" style={{ backgroundColor: cfg.trendColor }} />
-              <span className="text-[#6b7280] text-[9px] leading-none">Theil–Sen</span>
+
+            <p className="text-[#9ca3af] text-[10px] font-medium tracking-[0.5px] uppercase">
+              Análise histórica
+            </p>
+
+            <div className="bg-[#e5e7eb] flex gap-0.5 p-0.5 rounded-lg w-full">
+              {(['precip', 'temp'] as Tab[]).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setTab(t)}
+                  className={[
+                    'flex-1 py-1.5 px-2.5 rounded-md text-[11px] leading-none transition-colors',
+                    tab === t
+                      ? 'bg-white text-[#111827] font-semibold'
+                      : 'text-[#6b7280] font-medium',
+                  ].join(' ')}
+                >
+                  {t === 'precip' ? 'Precipitação' : 'Temperatura'}
+                </button>
+              ))}
             </div>
-            <div className="flex items-center gap-1">
-              <div className="h-px w-3.5" style={{ backgroundColor: 'rgba(156,163,175,0.6)' }} />
-              <span className="text-[#6b7280] text-[9px] leading-none">Média</span>
+
+            <div className="bg-white border border-[#e5e7eb] rounded-xl p-3.5 flex flex-col gap-2.5 w-full">
+              <div className="flex items-center justify-between">
+                <div className="flex flex-col gap-0.5">
+                  <span className="text-[#111827] text-[13px] font-semibold leading-none">
+                    {tab === 'precip' ? 'Precipitação anual' : 'Temperatura média anual'}
+                  </span>
+                  <span className="text-[#9ca3af] text-[11px] leading-none">
+                    2001–2025 · NASA/MERRA-2
+                  </span>
+                </div>
+                <div className="bg-[#f3f4f6] px-2 py-1 rounded">
+                  <span className="text-[#6b7280] text-[10px] font-medium leading-none">
+                    {meanBadge}
+                  </span>
+                </div>
+              </div>
+
+              <div style={{ height: 140, width: '100%' }}>
+                <ResponsiveContainer width="100%" height="100%">
+                  <ComposedChart data={activeData} margin={{ top: 4, right: 4, bottom: 16, left: 24 }}>
+                    <CartesianGrid vertical={false} stroke="#f3f4f6" strokeWidth={1} />
+                    <XAxis
+                      dataKey="year"
+                      tickLine={false}
+                      axisLine={false}
+                      tick={{ fontSize: 8, fill: '#9ca3af' }}
+                      tickFormatter={xTickFormatter}
+                      interval={0}
+                    />
+                    <YAxis
+                      domain={yDomain}
+                      ticks={yTicks}
+                      tickLine={false}
+                      axisLine={false}
+                      tick={{ fontSize: 8, fill: '#9ca3af' }}
+                      width={26}
+                    />
+                    <ReferenceLine
+                      y={mean}
+                      stroke="rgba(156,163,175,0.6)"
+                      strokeWidth={1}
+                      strokeDasharray="4 3"
+                    />
+                    {tab === 'precip' ? (
+                      <Bar dataKey="value" fill="#22c55e" radius={[2, 2, 0, 0]} maxBarSize={8} />
+                    ) : (
+                      <Area
+                        dataKey="value"
+                        stroke="#f59e0b"
+                        strokeWidth={2}
+                        fill="#fff9e0"
+                        dot={false}
+                        activeDot={{ r: 3 }}
+                      />
+                    )}
+                    <Line
+                      dataKey="trend"
+                      stroke="#16a34a"
+                      strokeWidth={2}
+                      dot={false}
+                      activeDot={false}
+                    />
+                  </ComposedChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div className="flex gap-3.5 items-center">
+                <div className="flex items-center gap-1">
+                  <div className="size-2 rounded-sm" style={{ backgroundColor: tab === 'precip' ? '#22c55e' : '#f59e0b' }} />
+                  <span className="text-[#6b7280] text-[9px] leading-none">
+                    {tab === 'precip' ? 'Barras anuais' : 'Série histórica'}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="h-0.5 w-3.5 rounded bg-[#16a34a]" />
+                  <span className="text-[#6b7280] text-[9px] leading-none">Theil–Sen</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="h-px w-3.5" style={{ backgroundColor: 'rgba(156,163,175,0.6)' }} />
+                  <span className="text-[#6b7280] text-[9px] leading-none">Média</span>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        {/* Section label */}
-        <p className="text-[#9ca3af] text-[10px] font-medium tracking-[0.5px] uppercase">
-          O que mudou no clima?
-        </p>
+            <p className="text-[#9ca3af] text-[10px] font-medium tracking-[0.5px] uppercase">
+              O que mudou no clima?
+            </p>
 
-        {/* Trend description card */}
-        <div
-          className="rounded-xl p-3.5 flex flex-col gap-2.5 w-full border"
-          style={{ backgroundColor: cfg.cardBg, borderColor: cfg.cardBorder }}
-        >
-          <div className="flex items-center gap-2.5">
-            <Image src={cfg.icon} alt="" width={20} height={20} className="shrink-0" />
-            <span className="text-[#111827] text-[13px] font-semibold leading-none">
-              Tendência geral da região
-            </span>
-          </div>
-          <p className="text-[12px] leading-[18px]" style={{ color: cfg.bodyColor }}>
-            {cfg.trendText}
-            <strong style={{ color: cfg.boldColor }}>{cfg.trendBold}</strong>
-            {cfg.trendSuffix}
-          </p>
-        </div>
+            <div
+              className="rounded-xl p-3.5 flex flex-col gap-2.5 w-full border"
+              style={{
+                backgroundColor: tab === 'precip' ? '#f0fcf3' : '#fff9e0',
+                borderColor: tab === 'precip' ? '#dcf9e6' : '#fef1ca',
+              }}
+            >
+              <div className="flex items-center gap-2.5">
+                <Image
+                  src={tab === 'precip' ? '/icons/trend-precip.svg' : '/icons/trend-temp.svg'}
+                  alt=""
+                  width={20}
+                  height={20}
+                  className="shrink-0"
+                />
+                <span className="text-[#111827] text-[13px] font-semibold leading-none">
+                  Tendência geral da região
+                </span>
+              </div>
+              <p
+                className="text-[12px] leading-[18px]"
+                style={{ color: tab === 'precip' ? '#384051' : '#59400d' }}
+              >
+                {tab === 'precip'
+                  ? 'A precipitação anual apresentou tendência de '
+                  : 'A temperatura média anual apresentou tendência de '}
+                <strong style={{ color: tab === 'precip' ? '#111827' : '#b26301' }}>
+                  {slopeText} ({pText})
+                </strong>
+                {significant ? ', com significância estatística.' : ', sem significância estatística.'}
+              </p>
+            </div>
 
-        <div className="h-2" />
+            <div className="h-2" />
+          </>
+        )}
       </main>
     </>
+  )
+}
+
+function SummaryCard({
+  iconSrc,
+  label,
+  slope,
+  unit,
+  pValue,
+  bg,
+  border,
+  badgeBg,
+  slopeColor,
+  direction,
+}: {
+  iconSrc: string
+  label: string
+  slope: number
+  unit: string
+  pValue: number
+  bg: string
+  border: string
+  badgeBg: string
+  slopeColor: string
+  direction: 'up' | 'down'
+}) {
+  const significant = pValue < 0.05
+  const sign = slope > 0 ? '+' : ''
+  const slopeFormatted =
+    unit === '°C'
+      ? `${sign}${slope.toFixed(2).replace('.', ',')}${unit}`
+      : `${sign}${Math.round(slope)}`
+  const pFormatted = `p=${pValue.toFixed(3).replace('.', ',')}`
+  const dirLabel = slope > 0 ? (direction === 'up' ? '↑ Aumento' : '↓ Redução') : '↓ Redução'
+
+  return (
+    <div className="bg-white border border-[#e5e7eb] rounded-xl flex flex-col gap-1.5 items-center px-2.5 py-3 flex-1 min-w-0">
+      <div className="rounded-lg p-2 flex items-center justify-center" style={{ backgroundColor: bg }}>
+        <Image src={iconSrc} alt="" width={20} height={20} />
+      </div>
+      <span className="text-[#6b7280] text-[10px] font-medium text-center leading-none">{label}</span>
+      <div className="px-1.5 py-0.5 rounded" style={{ backgroundColor: badgeBg, borderColor: border }}>
+        <span className="text-[9px] font-semibold leading-none" style={{ color: slopeColor }}>
+          {dirLabel}
+        </span>
+      </div>
+      <span className="text-[#111827] text-base font-bold leading-none">{slopeFormatted}</span>
+      {unit !== '°C' && (
+        <span className="text-[#9ca3af] text-[9px] leading-none">mm/déc.</span>
+      )}
+      <div className="px-1 py-0.5 rounded" style={{ backgroundColor: badgeBg }}>
+        <span className="text-[8px] font-medium leading-none" style={{ color: slopeColor }}>
+          {pFormatted}
+        </span>
+      </div>
+      <span
+        className="text-[8px] font-medium text-center leading-none"
+        style={{ color: significant ? slopeColor : '#6b7280' }}
+      >
+        {significant ? 'Significativo' : 'Não Sig.'}
+      </span>
+    </div>
   )
 }

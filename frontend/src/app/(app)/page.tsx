@@ -1,51 +1,97 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { SelectField, type SelectOption } from '@/shared/components/SelectField'
+import Spinner from '@/shared/components/Spinner'
+import { getCrops, getClimateTrends, createAnalysis } from '@/shared/lib/api'
+import { CROP_CONFIGS } from '@/shared/lib/cropConfig'
+import { getPlantingYear } from '@/shared/lib/dateUtils'
+import type { Crop, TrendsResponse } from '@/shared/lib/types'
 
-const MUNICIPIOS: SelectOption[] = [
-  { value: 'campina-grande-pb', label: 'Campina Grande — PB' },
-  { value: 'joao-pessoa-pb',    label: 'João Pessoa — PB'    },
-  { value: 'recife-pe',         label: 'Recife — PE'         },
-  { value: 'fortaleza-ce',      label: 'Fortaleza — CE'      },
-  { value: 'natal-rn',          label: 'Natal — RN'          },
-  { value: 'mossoro-rn',        label: 'Mossoró — RN'        },
-  { value: 'sobral-ce',         label: 'Sobral — CE'         },
-  { value: 'caruaru-pe',        label: 'Caruaru — PE'        },
+const MUNICIPALITY_ID = 2504009
+
+const MUNICIPIO_OPTIONS: SelectOption[] = [
+  { value: String(MUNICIPALITY_ID), label: 'Campina Grande — PB' },
 ]
-
-const CULTURAS: SelectOption[] = [
-  { value: 'milho',    label: 'Milho'    },
-  { value: 'soja',     label: 'Soja'     },
-  { value: 'feijao',   label: 'Feijão'   },
-  { value: 'algodao',  label: 'Algodão'  },
-  { value: 'arroz',    label: 'Arroz'    },
-  { value: 'sorgo',    label: 'Sorgo'    },
-]
-
-/* Stats are keyed by município value. */
-const STATS: Record<string, { temp: string; precip: string; diasSecos: number; nome: string }> = {
-  'campina-grande-pb': { temp: '26°C', precip: '587mm', diasSecos: 214, nome: 'CAMPINA GRANDE' },
-  'joao-pessoa-pb':    { temp: '28°C', precip: '1842mm', diasSecos: 112, nome: 'JOÃO PESSOA'   },
-  'recife-pe':         { temp: '27°C', precip: '2489mm', diasSecos: 92,  nome: 'RECIFE'        },
-  'fortaleza-ce':      { temp: '28°C', precip: '1430mm', diasSecos: 180, nome: 'FORTALEZA'     },
-  'natal-rn':          { temp: '27°C', precip: '1570mm', diasSecos: 160, nome: 'NATAL'         },
-  'mossoro-rn':        { temp: '28°C', precip: '671mm',  diasSecos: 230, nome: 'MOSSORÓ'       },
-  'sobral-ce':         { temp: '29°C', precip: '840mm',  diasSecos: 210, nome: 'SOBRAL'        },
-  'caruaru-pe':        { temp: '24°C', precip: '641mm',  diasSecos: 195, nome: 'CARUARU'       },
-}
 
 export default function InicioPage() {
-  const [municipio, setMunicipio] = useState('campina-grande-pb')
-  const [cultura, setCultura]     = useState('milho')
+  const router = useRouter()
+  const [crops, setCrops] = useState<Crop[]>([])
+  const [cropOptions, setCropOptions] = useState<SelectOption[]>([])
+  const [trends, setTrends] = useState<TrendsResponse | null>(null)
+  const [loadingData, setLoadingData] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const stats = STATS[municipio]
+  const [selectedCropId, setSelectedCropId] = useState<string>('')
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const [fetchedCrops, fetchedTrends] = await Promise.all([
+          getCrops(),
+          getClimateTrends(MUNICIPALITY_ID),
+        ])
+        setCrops(fetchedCrops)
+        const options = fetchedCrops.map((c) => ({ value: String(c.id), label: c.name }))
+        setCropOptions(options)
+        if (options.length > 0) setSelectedCropId(options[0].value)
+        setTrends(fetchedTrends)
+      } catch {
+        setError('Não foi possível conectar ao servidor. Verifique se o backend está rodando.')
+      } finally {
+        setLoadingData(false)
+      }
+    }
+    loadData()
+  }, [])
+
+  async function handleStart() {
+    const cropId = Number(selectedCropId)
+    if (!cropId) return
+    const config = CROP_CONFIGS[cropId]
+    if (!config) return
+
+    setError(null)
+    try {
+      const result = await createAnalysis({
+        municipality_id: MUNICIPALITY_ID,
+        crop_id: cropId,
+        planting_year: getPlantingYear(),
+        cycle_days: config.cycle_days,
+        historical_period: { start_year: 2001, end_year: 2025 },
+        phases: config.phases,
+        check_windows: config.check_windows,
+      })
+      const cropName = crops.find((c) => c.id === cropId)?.name ?? ''
+      router.push(
+        `/janelas?analysis_id=${result.analysis_id}&crop_id=${cropId}&crop_name=${encodeURIComponent(cropName)}`
+      )
+    } catch {
+      setError('Erro ao iniciar análise. Tente novamente.')
+    }
+  }
+
+  const tempIndicator = trends?.indicators?.temperature_mean
+  const precipIndicator = trends?.indicators?.precipitation
+
+  const tempValue = tempIndicator?.status === 'available' && tempIndicator.mean != null
+    ? `${Math.round(tempIndicator.mean)}°C`
+    : '—'
+
+  const precipValue = precipIndicator?.status === 'available' && precipIndicator.mean != null
+    ? `${Math.round(precipIndicator.mean)}mm`
+    : '—'
+
+  const slopeVal = precipIndicator?.trend?.slope_per_decade
+  const trendValue = slopeVal != null
+    ? `${slopeVal > 0 ? '+' : ''}${Math.round(slopeVal)}mm`
+    : '—'
+  const trendColor = slopeVal != null && slopeVal > 0 ? '#3b82f6' : '#6b7280'
 
   return (
     <>
-      {/* ── Header ───────────────────────────────────── */}
       <header className="bg-[#1b4132] flex flex-col gap-1.5 px-5 pt-5 pb-6 shrink-0">
         <div className="flex items-center gap-2">
           <div className="size-6 relative shrink-0">
@@ -58,10 +104,8 @@ export default function InicioPage() {
         </p>
       </header>
 
-      {/* ── Content ──────────────────────────────────── */}
       <main className="flex-1 flex flex-col gap-4 bg-[#f3f4f6] px-4 py-6 overflow-y-auto">
 
-        {/* Title + description */}
         <h1 className="text-[18px] font-semibold leading-snug text-[#111827]">
           Quando plantar?
         </h1>
@@ -69,49 +113,67 @@ export default function InicioPage() {
           Use dados climáticos históricos para encontrar as melhores janelas de plantio.
         </p>
 
-        {/* Selects */}
         <SelectField
           label="MUNICÍPIO"
-          options={MUNICIPIOS}
-          value={municipio}
-          onChange={setMunicipio}
+          options={MUNICIPIO_OPTIONS}
+          value={String(MUNICIPALITY_ID)}
+          onChange={() => {}}
           iconSrc="/icons/pin.svg"
         />
-        <SelectField
-          label="CULTURA"
-          options={CULTURAS}
-          value={cultura}
-          onChange={setCultura}
-          iconSrc="/icons/milho.svg"
-        />
 
-        {/* Spacer */}
+        {loadingData ? (
+          <div className="bg-white border border-[#e5e7eb] rounded-xl px-3.5 py-3 flex items-center gap-2">
+            <Spinner className="w-auto h-auto" />
+            <span className="text-[14px] text-[#6b7280]">Carregando culturas…</span>
+          </div>
+        ) : (
+          <SelectField
+            label="CULTURA"
+            options={cropOptions}
+            value={selectedCropId}
+            onChange={setSelectedCropId}
+            iconSrc="/icons/milho.svg"
+          />
+        )}
+
+        {error && (
+          <p className="text-[13px] text-[#c01b1b] leading-snug bg-[#ffebeb] rounded-lg px-3 py-2">
+            {error}
+          </p>
+        )}
+
         <div className="h-2" />
 
-        {/* CTA */}
-        <Link
-          href="/janelas"
-          className="w-full bg-[#0e8038] text-white py-3.5 px-5 rounded-xl text-[15px] font-semibold leading-none active:opacity-90 transition-opacity text-center block"
+        <button
+          onClick={handleStart}
+          disabled={loadingData || !selectedCropId}
+          className="w-full bg-[#0e8038] text-white py-3.5 px-5 rounded-xl text-[15px] font-semibold leading-none active:opacity-90 transition-opacity text-center disabled:opacity-60"
         >
           Iniciar
-        </Link>
+        </button>
 
-        {/* Climate stats */}
         <p className="type-label text-[#9ca3af]">
-          DADOS CLIMÁTICOS — {stats.nome}
+          DADOS CLIMÁTICOS — CAMPINA GRANDE
         </p>
 
-        <div className="flex gap-2">
-          <StatCard value={stats.temp}           valueColor="#f59e0b" label="Temp. média" />
-          <StatCard value={stats.precip}         valueColor="#3b82f6" label="Precip."     />
-          <StatCard value={String(stats.diasSecos)} valueColor="#6b7280" label="Dias secos" />
-        </div>
+        {loadingData ? (
+          <div className="flex gap-2">
+            {[0, 1, 2].map((i) => (
+              <div key={i} className="flex-1 bg-white border border-[#e5e7eb] rounded-[10px] px-3 py-2.5 h-[60px] animate-pulse" />
+            ))}
+          </div>
+        ) : (
+          <div className="flex gap-2">
+            <StatCard value={tempValue}   valueColor="#f59e0b" label="Temp. média" />
+            <StatCard value={precipValue} valueColor="#3b82f6" label="Precip. média" />
+            <StatCard value={trendValue}  valueColor={trendColor} label="Tendência/déc." />
+          </div>
+        )}
       </main>
     </>
   )
 }
 
-/* ── StatCard ──────────────────────────────────────────── */
 function StatCard({
   value,
   valueColor,

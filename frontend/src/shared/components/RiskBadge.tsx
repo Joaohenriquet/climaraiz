@@ -1,12 +1,12 @@
 export type RiskLevel = 'alto' | 'moderado' | 'atencao' | 'favoravel' | 'excelente' | 'bom'
 
 const STYLES: Record<RiskLevel, { bg: string; text: string; label: string }> = {
-  alto:      { bg: '#ffebeb', text: '#c01b1b', label: 'Alto'      },
-  moderado:  { bg: '#fff9e0', text: '#b26301', label: 'Moderado'  },
-  atencao:   { bg: '#fff9e0', text: '#b26301', label: 'Atenção'   },
-  favoravel: { bg: '#dcf9e6', text: '#0e8038', label: 'Favorável' },
-  excelente: { bg: '#dcf9e6', text: '#0e8038', label: 'Excelente' },
-  bom:       { bg: '#e5f1ff', text: '#2670eb', label: 'Bom'       },
+  alto:      { bg: '#ffebeb', text: '#c01b1b', label: 'Desfavorável'   },
+  moderado:  { bg: '#fff9e0', text: '#b26301', label: 'Risco médio'    },
+  atencao:   { bg: '#fff9e0', text: '#b26301', label: 'Com ressalvas'  },
+  favoravel: { bg: '#dcf9e6', text: '#0e8038', label: 'Favorável'      },
+  excelente: { bg: '#dcf9e6', text: '#0e8038', label: 'Excelente'      },
+  bom:       { bg: '#e5f1ff', text: '#2670eb', label: 'Boa janela'     },
 }
 
 interface RiskBadgeProps {

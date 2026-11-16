@@ -1,99 +1,130 @@
-import Link from 'next/link'
+'use client'
+
+import { Suspense, useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import AppHeader from '@/shared/components/AppHeader'
 import PhaseCard from '@/shared/components/PhaseCard'
-import { type RiskLevel } from '@/shared/components/RiskBadge'
+import Spinner from '@/shared/components/Spinner'
+import { getAnalysisDatePhases } from '@/shared/lib/api'
+import { formatShortDate } from '@/shared/lib/dateUtils'
+import type { Phase } from '@/shared/lib/types'
+import type { RiskLevel } from '@/shared/components/RiskBadge'
 
-interface Phase {
-  name: string
-  duration: string
-  status: RiskLevel
-  progressPercent: number
-  progressColor: string
-  metrics: { label: string; value: string }[]
+function phaseScore(phase: Phase): number {
+  const days = phase.end_day - phase.start_day + 1
+  const totalMm = phase.assessment?.precipitation?.total_mm?.mean
+  if (totalMm == null) return 50
+  return Math.min(100, Math.round((totalMm / (days * 2)) * 100))
 }
 
-const PHASES: Phase[] = [
-  {
-    name: 'Germinação',
-    duration: '1–15 dias',
-    status: 'excelente',
-    progressPercent: 100,
-    progressColor: '#22c55e',
-    metrics: [
-      { label: 'Temp.',   value: '26°C' },
-      { label: 'Precip.', value: '74mm' },
-      { label: 'Umid.',   value: '76%'  },
-    ],
-  },
-  {
-    name: 'Floração',
-    duration: '30–50 dias',
-    status: 'excelente',
-    progressPercent: 71,
-    progressColor: '#f59e0b',
-    metrics: [
-      { label: 'Temp.',   value: '25°C' },
-      { label: 'Precip.', value: '92mm' },
-      { label: 'Umid.',   value: '82%'  },
-    ],
-  },
-  {
-    name: 'Enchimento do grão',
-    duration: '50–90 dias',
-    status: 'bom',
-    progressPercent: 85,
-    progressColor: '#22c55e',
-    metrics: [
-      { label: 'Temp.',   value: '25°C' },
-      { label: 'Precip.', value: '48mm' },
-      { label: 'Umid.',   value: '68%'  },
-    ],
-  },
-  {
-    name: 'Maturação e colheita',
-    duration: '90–125 dias',
-    status: 'atencao',
-    progressPercent: 76,
-    progressColor: '#f59e0b',
-    metrics: [
-      { label: 'Temp.',   value: '24°C' },
-      { label: 'Precip.', value: '22mm' },
-      { label: 'Umid.',   value: '56%'  },
-    ],
-  },
-]
+function phaseRisk(score: number): RiskLevel {
+  if (score >= 70) return 'excelente'
+  if (score >= 50) return 'bom'
+  if (score >= 30) return 'atencao'
+  return 'alto'
+}
 
-export default function CicloPage() {
+function phaseColor(risk: RiskLevel): string {
+  if (risk === 'excelente') return '#22c55e'
+  if (risk === 'bom') return '#3b82f6'
+  if (risk === 'atencao') return '#f59e0b'
+  return '#ef4444'
+}
+
+function CicloContent() {
+  const searchParams = useSearchParams()
+  const analysisId = searchParams.get('analysis_id') ?? ''
+  const date = searchParams.get('date') ?? ''
+  const cropId = searchParams.get('crop_id') ?? ''
+  const cropName = searchParams.get('crop_name') ?? 'Cultura'
+
+  const [phases, setPhases] = useState<Phase[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (!analysisId || !date) return
+    getAnalysisDatePhases(analysisId, date)
+      .then((res) => setPhases(res.phases))
+      .catch(() => setError('Erro ao carregar fases do ciclo.'))
+      .finally(() => setLoading(false))
+  }, [analysisId, date])
+
+  const shortDate = date ? formatShortDate(date) : ''
+  const previsaoBack = `/previsao?analysis_id=${analysisId}&crop_id=${cropId}&crop_name=${encodeURIComponent(cropName)}&date=${date}`
+
   return (
     <>
       <AppHeader
         title="Ciclo da Cultura"
-        subtitle="Milho — início em 13 de março"
-        backHref="/previsao"
+        subtitle={`${cropName} — início em ${shortDate}`}
+        backHref={previsaoBack}
       />
 
       <main className="flex-1 flex flex-col gap-2.5 bg-[#f3f4f6] px-4 py-6 overflow-y-auto">
-        {PHASES.map((phase) => (
-          <PhaseCard
-            key={phase.name}
-            name={phase.name}
-            duration={phase.duration}
-            status={phase.status}
-            progressPercent={phase.progressPercent}
-            progressColor={phase.progressColor}
-            metrics={phase.metrics}
-          />
-        ))}
 
-        <div className="h-2" />
+        {loading ? (
+          <div className="flex flex-col items-center gap-3 py-16">
+            <Spinner />
+            <span className="text-[13px] text-[#6b7280]">Carregando ciclo…</span>
+          </div>
+        ) : error ? (
+          <p className="text-[13px] text-[#c01b1b] bg-[#ffebeb] rounded-lg px-3 py-2">{error}</p>
+        ) : phases.length === 0 ? (
+          <p className="text-[14px] text-[#6b7280] text-center py-8">
+            Nenhuma fase disponível para esta análise.
+          </p>
+        ) : (
+          <>
+            {phases.map((phase) => {
+              const score = phaseScore(phase)
+              const risk = phaseRisk(score)
+              const color = phaseColor(risk)
+              const tempMean = phase.assessment?.temperature_mean?.mean_c?.mean
+              const precipTotal = phase.assessment?.precipitation?.total_mm?.mean
+              const metrics = [
+                { label: 'Temp.', value: tempMean != null ? `${Math.round(tempMean)}°C` : '—' },
+                { label: 'Precip.', value: precipTotal != null ? `${Math.round(precipTotal)}mm` : '—' },
+              ]
 
-        <Link
-          href="/"
-          className="w-full bg-[#0e8038] text-white py-3.5 px-5 rounded-xl text-[15px] font-semibold leading-none text-center block"
-        >
-          Fazer nova análise
-        </Link>
+              return (
+                <PhaseCard
+                  key={phase.id}
+                  name={phase.name}
+                  duration={`Dias ${phase.start_day + 1}–${phase.end_day + 1}`}
+                  status={risk}
+                  progressPercent={score}
+                  progressColor={color}
+                  metrics={metrics}
+                />
+              )
+            })}
+
+            <div className="h-2" />
+
+            <a
+              href="/"
+              className="w-full bg-[#0e8038] text-white py-3.5 px-5 rounded-xl text-[15px] font-semibold leading-none text-center block"
+            >
+              Fazer nova análise
+            </a>
+          </>
+        )}
       </main>
     </>
+  )
+}
+
+export default function CicloPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex-1 flex items-center justify-center">
+          <Spinner />
+        </div>
+      }
+    >
+      <CicloContent />
+    </Suspense>
   )
 }
