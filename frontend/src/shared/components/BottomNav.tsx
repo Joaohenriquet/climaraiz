@@ -31,7 +31,8 @@ export default function BottomNav() {
   return (
     <nav className="bg-[#1b4132] flex items-stretch pt-2.5 pb-7 shrink-0">
       {TABS.map(({ href, Icon, label }) => {
-        const active = pathname === href
+        const FLOW_PATHS = ['/janelas', '/previsao', '/ciclo']
+        const active = pathname === href || (href === '/' && FLOW_PATHS.some(p => pathname.startsWith(p)))
         return (
           <Link
             key={href}
