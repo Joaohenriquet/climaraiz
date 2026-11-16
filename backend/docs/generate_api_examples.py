@@ -33,10 +33,14 @@ def main():
                 capture("GET", url)
             body = {"municipality_id": 2504009, "crop_id": 1, "production_system": "rainfed", "planting_year": 2027,
                     "historical_period": {"start_year": 2001, "end_year": 2025}, "cycle_days": 120,
-                    "phases": [{"id": "cycle", "name": "Illustrative whole-cycle segment", "start_day": 0, "end_day": 119}],
+                    "phases": [
+                        {"id": "germinacao", "name": "Germinação", "start_day": 0, "end_day": 14},
+                        {"id": "floracao", "name": "Floração", "start_day": 15, "end_day": 65},
+                        {"id": "enchimento", "name": "Enchimento", "start_day": 66, "end_day": 99},
+                        {"id": "maturacao", "name": "Maturação", "start_day": 100, "end_day": 119}],
                     "check_windows": [
-                        {"id": "flowering", "name": "Illustrative flowering window", "start_day": 40, "end_day": 65},
-                        {"id": "pollination", "name": "Illustrative pollination window", "start_day": 45, "end_day": 55},
+                        {"id": "flowering", "phase_id": "floracao", "name": "Illustrative flowering window", "start_day": 40, "end_day": 65},
+                        {"id": "pollination", "phase_id": "floracao", "name": "Illustrative pollination window", "start_day": 45, "end_day": 55},
                         {"id": "grain_filling", "name": "Illustrative grain-filling window", "start_day": 66, "end_day": 95}],
                     "daily_mean_threshold_c": None}
             created = capture("POST", "/api/v1/planting/analyses", body)

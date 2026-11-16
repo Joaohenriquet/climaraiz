@@ -39,7 +39,7 @@ The offsets are illustrative user scenarios, **not agronomic recommendations**. 
 - `GET /api/v1/planting/analyses/{id}` returns `dates[].scenario_assessment` for all 30 dates.
 - `GET /api/v1/planting/analyses/{id}/dates/{date}` includes the same summary plus `yearly_assessment`.
 - `GET /api/v1/crops` returns the assessment policy and source registry.
-- The phases route continues to return the submitted partition's per-phase exposure. Overlapping check results remain in `climate_checks` on calendar/date responses.
+- The phases route continues to return the submitted partition's per-phase exposure. Overlapping check results remain in `climate_checks` on calendar/date responses and also appear in explicitly linked phase cards.
 
 For April 25 in the example above, the scenario has 25 common complete years and 10 matching years: `scenario_criteria_met_pct` is **40**. Detailed yearly entries contain `year`, `status`, `criteria_met`, and `failed_checks`. A year failing two checks counts once among `years_not_meeting_criteria`.
 
@@ -60,12 +60,12 @@ Display `scenario_criteria_met_pct` alongside its numerator, denominator and exc
 `GET /api/v1/planting/analyses/{id}/dates/{date}/phases` now returns
 `climate_checks`, `scenario_assessment`, `risk_level` and `risk_level_reason`
 inside each phase. The date-detail route exposes the identical phase objects.
-Only checks whose `phase` exactly matches the submitted phase ID participate.
+Checks explicitly linked by `check_windows[].phase_id` participate in that segment. Without a link, legacy exact matching of check-window and phase IDs is preserved.
 A whole-cycle rain benchmark is not applied to shorter phases, and a nested
 pollination window is not silently relabeled as flowering. Phase names are
 presentation labels; matching uses IDs. Checks for windows submitted only in
-`check_windows` remain in the date's `climate_checks`, without inventing a phase
-partition for the phases route.
+`check_windows` remain in the date's `climate_checks`. Separate windows appear
+in phase cards when explicitly linked; no phase partition is invented.
 
 The percentage uses common complete years for the included phase checks.
 For the reference corn scenario, a submitted `flowering` phase at days 40–65
@@ -136,3 +136,11 @@ Their check definitions, observations and yearly results remain unchanged;
 results without assessment counts remain not_supported. Existing client code
 that assumed risk_level was always null/not_supported must now handle
 low, moderate and high as exploratory exposure categories.
+
+
+## Explicit phase associations (API 0.4.0)
+
+See [window-to-phase bindings](phase_window_bindings.md) for the full request,
+validation rules, numerical example and migration instructions. `phase_id`
+links a criterion window to a submitted segment while preserving their distinct
+IDs and intervals. Previously saved scenarios are not silently reassigned.
