@@ -132,8 +132,8 @@ class PlantingService:
             candidate_dates = self.dates(request.crop_id, request.planting_year)
             crop_checks = self.crop(request.crop_id).get("climate_checks", [])
             check_windows = {p.id: p for p in [*request.phases, *request.check_windows]}
-            check_windows["cycle"] = ScenarioPhase(id="cycle", name="Complete user-selected cycle",
-                                                     start_day=0, end_day=request.cycle_days-1)
+            check_windows.setdefault("cycle", ScenarioPhase(id="cycle", name="Complete user-selected cycle",
+                                                           start_day=0, end_day=request.cycle_days-1))
             results = []
             for number, planting_date in enumerate(candidate_dates):
                 annual_records, phase_records = [], {p.id: [] for p in request.phases}
@@ -216,7 +216,7 @@ class PlantingService:
                 risk_status="exploratory_exposure" if overall["risk_level"] != "not_supported" else "not_supported")
             for phase in item.get("phases", []):
                 phase_checks = [check for check in item.get("climate_checks", [])
-                                if check["phase"] == phase["id"]]
+                                if (check.get("window", {}).get("phase_id") or check["phase"]) == phase["id"]]
                 policy = result.get("assessment_configuration", {})
                 phase_scenario = assess_scenario(phase_checks, period["start_year"], period["end_year"], policy)
                 phase["assessment"].update(

@@ -3,7 +3,7 @@
   "info": {
     "title": "ClimaRaiz API",
     "description": "Historical climate exposure and user-supplied planting windows. No online ZARC integration, yield prediction, or unvalidated crop-risk scores.",
-    "version": "0.3.0"
+    "version": "0.4.0"
   },
   "paths": {
     "/health": {
@@ -498,6 +498,55 @@
   },
   "components": {
     "schemas": {
+      "CheckWindow": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]{0,49}$",
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Name"
+          },
+          "start_day": {
+            "type": "integer",
+            "maximum": 364.0,
+            "minimum": 0.0,
+            "title": "Start Day"
+          },
+          "end_day": {
+            "type": "integer",
+            "maximum": 364.0,
+            "minimum": 0.0,
+            "title": "End Day"
+          },
+          "phase_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]{0,49}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phase Id",
+            "description": "Optional ID of the submitted cycle segment receiving this check window's results. The window must be entirely inside that segment; its own ID still selects the crop rules."
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "start_day",
+          "end_day"
+        ],
+        "title": "CheckWindow"
+      },
       "HTTPValidationError": {
         "properties": {
           "detail": {
@@ -577,7 +626,7 @@
           },
           "check_windows": {
             "items": {
-              "$ref": "#/components/schemas/ScenarioPhase"
+              "$ref": "#/components/schemas/CheckWindow"
             },
             "type": "array",
             "maxItems": 20,

@@ -22,8 +22,8 @@ def main(base_url="http://127.0.0.1:8000"):
                 "phases": [{"id": "first", "name": "First scenario segment", "start_day": 0, "end_day": 29},
                            {"id": "remaining", "name": "Remaining scenario segment", "start_day": 30, "end_day": 119}],
                 "check_windows": [
-                    {"id": "flowering", "name": "Illustrative flowering", "start_day": 40, "end_day": 65},
-                    {"id": "pollination", "name": "Illustrative pollination", "start_day": 45, "end_day": 55}]})
+                    {"id": "flowering", "phase_id": "remaining", "name": "Illustrative flowering", "start_day": 40, "end_day": 65},
+                    {"id": "pollination", "phase_id": "remaining", "name": "Illustrative pollination", "start_day": 45, "end_day": 55}]})
             response.raise_for_status()
             path = response.json()["links"]["result"]
             for _ in range(100):
@@ -44,7 +44,12 @@ def main(base_url="http://127.0.0.1:8000"):
             assert selected["historical_assessment"]["precipitation"]["evaluated_years"] == 25
             detail = client.get(path + "/dates/" + selected["date"] + "/phases").json()
             assert len(detail["phases"]) == 2
-            assert all(phase["risk_level"] == "not_supported" for phase in detail["phases"])
+            assert detail["phases"][0]["risk_level"] == "not_supported"
+            linked = detail["phases"][1]
+            assert linked["scenario_assessment"]["status"] == "available"
+            assert linked["risk_level"] in ("low", "moderate", "high")
+            assert all(check["window"]["phase_id"] == "remaining" for check in linked["climate_checks"])
+            assert detail["phases"] == selected_detail["phases"]
             print(f"{crop_id}: 30 dates, 25 common complete years, scenario matching and phase details verified")
         schema = client.get("/openapi.json").json()
         output = Path(__file__).resolve().parents[1] / "docs"
