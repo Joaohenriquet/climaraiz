@@ -119,8 +119,7 @@ Provide phase IDs matching each rule. Existing `phases` remain a non-overlapping
   "historical_period": {"start_year": 2001, "end_year": 2025},
   "check_windows": [
     {"id": "flowering", "name": "Illustrative flowering window", "start_day": 40, "end_day": 65},
-    {"id": "pollination", "name": "Illustrative pollination window", "start_day": 45, "end_day": 55},
-    {"id": "grain_filling", "name": "Illustrative grain-filling window", "start_day": 66, "end_day": 95}
+    {"id": "pollination", "name": "Illustrative pollination window", "start_day": 45, "end_day": 55}
   ]
 }
 ```
@@ -135,7 +134,7 @@ Dry sequences and phase totals remain descriptive with a null event frequency wh
 
 Every planting date now includes **`scenario_assessment`**, returned both in the calendar and in the date detail. It is also visible in the planting-date table and selected-date panel. For each historical year, the evaluator combines all rules with `include_in_assessment: true`: a year meets the scenario only if **none of those checks reports its configured event**. It never sums event percentages, averages them, or counts the same year twice.
 
-The denominator is the intersection of complete years for every included check. Missing phase windows, unavailable sources, or included descriptive rules without an event definition block the combined percentage; they are not silently dropped. Missing observations exclude the affected year from the combined denominator, with reasons in `excluded_years`. If no common complete years remain, the percentage is null. A check with `include_in_assessment: false` does not affect the score. This matters for sunflower: its mean-temperature peak is descriptive, so the combined criterion checks are rainfall and dry-spell occurrence only.
+The denominator is the intersection of complete years for every included check. Missing required windows, unavailable sources, or included descriptive rules without an event definition block the combined percentage; they are not silently dropped. Missing observations exclude the affected year from the combined denominator, with reasons in `excluded_years`. If no common complete years remain, the percentage is null. A check with `include_in_assessment: false` does not affect the score. This matters for sunflower: its mean-temperature peak is descriptive, so the combined criterion checks are rainfall and dry-spell occurrence only.
 
 ```json
 {
@@ -261,3 +260,36 @@ See the [complete binding example and migration guide](docs/phase_window_binding
 Create a new analysis with the linked request and use its returned ID: old
 analyses retain their saved associations. Linking does not add missing crop
 criteria, so unrelated phase cards can still return `not_supported`.
+
+
+### Minimum criteria for every phase (API 0.5.0)
+
+All three crops now support germination and filling dry spells (at least five
+consecutive days below 1 mm/day) and pre-harvest wetness (at least six rainy days
+>=1 mm in the final ten cycle days). These are exploratory meteorological
+proxies, not validated crop-loss thresholds. Germination/filling windows must
+span at least five days; the maturation check must use exactly the final ten
+days. A longer maturation segment can link to that narrower check window.
+
+Use the [complete JSON request](docs/requests/all_phase_analysis.json) to supply
+and link all four phase cards. Change crop_id to 2 or 3 for beans or sunflower;
+review timing for the desired cultivar rather than treating these offsets as
+recommendations. From the backend directory:
+
+```sh
+curl -X POST http://127.0.0.1:8000/api/v1/planting/analyses \
+  -H 'Content-Type: application/json' \
+  --data-binary @docs/requests/all_phase_analysis.json
+```
+
+For April 25, the example gives 16% low germination exposure, 24% moderate
+flowering exposure, 56% high filling exposure and 36% moderate pre-harvest
+exposure. Corn's overall exposure becomes 88%; its criteria match is 12%.
+
+For backward compatibility, the new windows are optional when absent, with
+omissions listed in `scenario_assessment.omitted_optional_checks`. Once supplied,
+the checks participate in the phase and overall score: invalid windows or
+unavailable sources are not silently omitted. Supplying all windows produces a
+full minimum-profile evaluation. Old saved analyses keep their old criteria.
+Restart the server and POST a new request to use the new profile.
+See [criteria, sources and limitations](docs/minimum_phase_criteria.md).

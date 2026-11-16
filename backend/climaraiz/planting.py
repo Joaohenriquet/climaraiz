@@ -151,7 +151,8 @@ class PlantingService:
                            "assessment": self._consolidate(phase_records[p.id], request.daily_mean_threshold_c),
                            "yearly_exposure": phase_records[p.id]} for p in request.phases]
                 checks = [evaluate_check(rule, check_windows, frames, planting_date,
-                    request.historical_period.start_year, request.historical_period.end_year) for rule in crop_checks]
+                    request.historical_period.start_year, request.historical_period.end_year,
+                    cycle_days=request.cycle_days) for rule in crop_checks]
                 scenario = assess_scenario(checks, request.historical_period.start_year,
                                            request.historical_period.end_year, self.windows.get("assessment", {}))
                 results.append({"date": planting_date.isoformat(),

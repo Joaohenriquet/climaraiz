@@ -49,7 +49,7 @@ For April 25 in the example above, the scenario has 25 common complete years and
 
 `evaluated_years` includes only years complete in **all** included checks. For instance, if one check has 25 complete years and another has 24, the score uses the 24 common years, not different denominators. `excluded_years` records year, affected check and missing-day count. Per-check frequencies can retain different denominators; they are not averaged into the combined result.
 
-If a required phase or source is unavailable, the combined response has `status: unavailable`, `reason: REQUIRED_CHECK_UNAVAILABLE`, null counts/percentage, and explanatory `blocking_checks`. Missing windows are not reported as zero exposure. If observations exist but there are no common complete years, reason is `NO_COMMON_COMPLETE_YEARS`. A descriptive check deliberately included without an event definition blocks the result with `EVENT_NOT_DEFINED`. No included checks returns `NO_CHECKS_INCLUDED`.
+If a required window or an included source is unavailable, the combined response has `status: unavailable`, `reason: REQUIRED_CHECK_UNAVAILABLE`, null counts/percentage, and explanatory `blocking_checks`. Missing windows are not reported as zero exposure. If observations exist but there are no common complete years, reason is `NO_COMMON_COMPLETE_YEARS`. A descriptive check deliberately included without an event definition blocks the result with `EVENT_NOT_DEFINED`. No included checks returns `NO_CHECKS_INCLUDED`.
 
 ## Frontend wording
 
@@ -144,3 +144,14 @@ See [window-to-phase bindings](phase_window_bindings.md) for the full request,
 validation rules, numerical example and migration instructions. `phase_id`
 links a criterion window to a submitted segment while preserving their distinct
 IDs and intervals. Previously saved scenarios are not silently reassigned.
+
+
+## Minimum phase criteria (API 0.5.0)
+
+Germination and filling dry-spell checks and a final-ten-day rainy-day count
+are active for every crop. See [criteria and sources](minimum_phase_criteria.md)
+and the [complete request](requests/all_phase_analysis.json). New windows are
+optional when absent and reported in `omitted_optional_checks`; required legacy
+windows still block when absent. Once a new window is supplied, all usual
+blocking and complete-year rules apply. The 40% legacy corn example above
+assesses fewer criteria than the complete example (12% match, 88% exposure).
