@@ -49,7 +49,7 @@ function updateWindow(){
   if(!crop)return;
   $("window-label").textContent=`Window: ${crop.window_start.replace('-','/')} — ${crop.window_end.replace('-','/')} · rainfed`;
   const required=[...new Set((crop.climate_checks||[]).filter(c=>c.include_in_assessment&&c.phase!=="cycle").map(c=>c.phase))];
-  $("check-window-help").textContent=`Required for a combined percentage: ${required.join(', ')}. Supply inclusive day offsets below or as phase IDs. The whole-cycle window is automatic. No cultivar dates are assumed.`;
+  $("check-window-help").textContent=`Required for a combined percentage: ${required.join(', ')}. Supply inclusive day offsets below or as phase IDs. Set phase_id on a check window to link its results to a submitted phase card; the window must fit inside that phase. The whole-cycle window is automatic. No cultivar dates are assumed.`;
 }
 $("crop").addEventListener("change",updateWindow);
 function renderSources(result){

@@ -26,6 +26,11 @@ class ScenarioPhase(StrictModel):
     end_day: int = Field(ge=0, le=364)
 
 
+class CheckWindow(ScenarioPhase):
+    phase_id: Optional[str] = Field(default=None, pattern=r"^[a-z][a-z0-9_]{0,49}$",
+        description="Optional ID of the submitted cycle segment receiving this check window's results. The window must be entirely inside that segment; its own ID still selects the crop rules.")
+
+
 class PlantingRequest(StrictModel):
     municipality_id: int = 2504009
     crop_id: int = Field(gt=0, strict=True, description="Numeric crop ID returned by GET /api/v1/crops.")
@@ -34,7 +39,7 @@ class PlantingRequest(StrictModel):
     historical_period: HistoricalPeriod = Field(default_factory=HistoricalPeriod)
     cycle_days: int = Field(ge=1, le=365, description="User-selected scenario duration; not a validated crop profile.")
     phases: List[ScenarioPhase] = Field(default_factory=list, max_length=20)
-    check_windows: List[ScenarioPhase] = Field(default_factory=list, max_length=20,
+    check_windows: List[CheckWindow] = Field(default_factory=list, max_length=20,
         description="Optional rule-evaluation windows; inclusive cycle-day offsets may overlap, e.g. pollination within flowering. Not validated crop phenology.")
     daily_mean_threshold_c: Optional[float] = Field(default=None, ge=-50, le=60,
         description="Optional descriptive threshold for daily mean temperature. Not a crop stress limit.")
@@ -60,4 +65,12 @@ class PlantingRequest(StrictModel):
                 expected_start = phase.end_day + 1
             if expected_start != self.cycle_days:
                 raise ValueError("Inclusive phase endpoints must cover exactly cycle_days.")
+        phases_by_id = {phase.id: phase for phase in self.phases}
+        for window in self.check_windows:
+            if window.phase_id is not None:
+                phase = phases_by_id.get(window.phase_id)
+                if phase is None:
+                    raise ValueError("A check window's phase_id must reference a submitted phase.")
+                if window.start_day < phase.start_day or window.end_day > phase.end_day:
+                    raise ValueError("A linked check window must be entirely inside its referenced phase.")
         return self

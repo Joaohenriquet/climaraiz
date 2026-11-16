@@ -108,7 +108,7 @@ Each crop exposes versioned `climate_checks` from the crop configuration. Corn u
 
 The rainfall targets are scenario benchmarks inspired by the linked agronomic references; they do **not** establish effective rainfall or crop water sufficiency. The five-day convention does not prove crop damage. Every configured rule includes its interpretation and `source_id`; the full source registry is returned by `GET /api/v1/crops` and saved with analyses. The corn daily-mean 33 °C proxy remains an explicitly exploratory scenario without a validated mean-temperature damage threshold.
 
-Provide phase IDs matching each rule. Existing `phases` remain a non-overlapping partition of the cycle. Optional `check_windows` use the same fields but may overlap, allowing `pollination` within `flowering`. IDs must be unique across both lists; all inclusive zero-based offsets must fall inside the cycle. The reserved `cycle` window is automatically resolved to days `0..cycle_days-1`; if explicitly supplied, it must cover the complete cycle. No flowering or pollination dates are assumed when absent.
+Provide phase IDs matching each rule. Existing `phases` remain a non-overlapping partition of the cycle. Optional `check_windows` extend those fields with an optional `phase_id` and may overlap, allowing `pollination` within `flowering`. IDs must be unique across both lists; all inclusive zero-based offsets must fall inside the cycle. The reserved `cycle` window is automatically resolved to days `0..cycle_days-1`; if explicitly supplied, it must cover the complete cycle. No flowering or pollination dates are assumed when absent.
 
 ```json
 {
@@ -158,7 +158,7 @@ The example above reproduces **April 25, 120 days, 2001–2025**, with the illus
 
 The date-detail response includes `yearly_assessment` with each year's pass/fail status and failed checks. The calendar omits that detailed list to keep the response smaller while returning the identical percentage, numerator, denominator, configuration, and exclusions. Unavailable risk classifications return `risk_level: "not_supported"`. `favorable_frequency_pct`, `risk_percentage`, and `best_historical_date` remain null. The API now supplies exploratory low/moderate/high exposure bands, not crop-success probabilities. Comparisons across crops are not an agricultural risk ranking because their criteria differ.
 
-The `/planting/analyses/{id}/dates/{date}/phases` route also includes `scenario_assessment` and `climate_checks` for each submitted phase, using only checks with that exact phase ID. Phase cards can show `scenario_criteria_met_pct` with its numerator and denominator. No configured checks means an unavailable percentage, not low risk. Each phase returns its own `risk_level` and `risk_level_reason`; unavailable assessment returns `not_supported`, with the technical scenario reason. Existing analyses use their saved rule results and policy, without applying new configuration retroactively.
+The `/planting/analyses/{id}/dates/{date}/phases` route also includes `scenario_assessment` and `climate_checks` for each submitted phase, using checks explicitly linked through `check_windows[].phase_id`, or legacy exact-ID matches when no link is present. Phase cards can show `scenario_criteria_met_pct` with its numerator and denominator. No configured checks means an unavailable percentage, not low risk. Each phase returns its own `risk_level` and `risk_level_reason`; unavailable assessment returns `not_supported`, with the technical scenario reason. Existing analyses use their saved rule results and policy, without applying new configuration retroactively.
 
 ### Exploratory exposure classification
 
@@ -246,3 +246,18 @@ moderate and high cases using unchanged regional daily observations and rules.
 `tests/test_real_exposure.py` includes direct numerical reference tests and API
 consistency checks for all three classes. All phase timings are illustrative
 scenarios, not cultivar recommendations.
+
+
+### Explicit links between check windows and phase cards (API 0.4.0)
+
+Keep segment IDs such as `floracao` in `phases`. Use criterion IDs such as
+`flowering` and `pollination` in `check_windows`, adding `phase_id: "floracao"`
+to associate their results with that card. The linked window must be fully
+inside the referenced segment. Invalid references or intervals return HTTP 400
+(`INVALID_REQUEST`). Missing phase_id retains legacy exact-ID behavior; no
+association is inferred by name or overlap. The overall calculation is unchanged.
+
+See the [complete binding example and migration guide](docs/phase_window_bindings.md).
+Create a new analysis with the linked request and use its returned ID: old
+analyses retain their saved associations. Linking does not add missing crop
+criteria, so unrelated phase cards can still return `not_supported`.
