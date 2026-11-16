@@ -1,6 +1,24 @@
 """Joint historical criteria matching with a common, explicit yearly denominator."""
 
 METHOD = "all_included_checks_without_events"
+CLASSIFICATION_VERSION = "historical-exposure-v1"
+
+
+def classify_exposure(assessment):
+    """Versioned MVP bands for event frequency, never probability of crop loss."""
+    assessment.update(risk_level="not_supported", exposure_frequency_pct=None,
+                      years_with_events=None, risk_basis="historical_configured_event_frequency",
+                      classification_version=CLASSIFICATION_VERSION,
+                      classification_thresholds={"low_max_pct": 20, "moderate_max_pct": 40})
+    if assessment.get("status") != "available" or not assessment.get("evaluated_years"):
+        return assessment
+    events = assessment.get("years_not_meeting_criteria")
+    if events is None:
+        return assessment
+    frequency = 100 * events / assessment["evaluated_years"]
+    assessment.update(exposure_frequency_pct=frequency, years_with_events=events,
+                      risk_level="low" if frequency <= 20 else "moderate" if frequency <= 40 else "high")
+    return assessment
 
 
 def assess_scenario(checks, start_year, end_year, configuration):
@@ -12,6 +30,7 @@ def assess_scenario(checks, start_year, end_year, configuration):
                                    "variable": check["variable"]} for check in included],
               "blocking_checks": [], "validation_status": "exploratory",
               "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"}
+    classify_exposure(result)
     if configuration.get("method") != METHOD:
         result["reason"] = "UNSUPPORTED_ASSESSMENT_METHOD"
         return result
@@ -54,4 +73,4 @@ def assess_scenario(checks, start_year, end_year, configuration):
     result.update(status="available", reason=None, evaluated_years=evaluated,
                   years_meeting_criteria=matched, years_not_meeting_criteria=evaluated-matched,
                   scenario_criteria_met_pct=100*matched/evaluated)
-    return result
+    return classify_exposure(result)

@@ -1099,9 +1099,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 56.0
             },
             "climate_checks": [
               {
@@ -1244,9 +1246,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 56.0,
+              "years_with_events": 14,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-04-22",
@@ -1295,9 +1307,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 60.0
             },
             "climate_checks": [
               {
@@ -1440,9 +1454,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 60.0,
+              "years_with_events": 15,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-04-23",
@@ -1491,9 +1515,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 60.0
             },
             "climate_checks": [
               {
@@ -1636,9 +1662,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 60.0,
+              "years_with_events": 15,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-04-24",
@@ -1687,9 +1723,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 64.0
             },
             "climate_checks": [
               {
@@ -1832,9 +1870,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 64.0,
+              "years_with_events": 16,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-04-25",
@@ -1883,9 +1931,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 60.0
             },
             "climate_checks": [
               {
@@ -2028,9 +2078,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 60.0,
+              "years_with_events": 15,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-04-26",
@@ -2079,9 +2139,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 60.0
             },
             "climate_checks": [
               {
@@ -2224,9 +2286,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 60.0,
+              "years_with_events": 15,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-04-27",
@@ -2275,9 +2347,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 60.0
             },
             "climate_checks": [
               {
@@ -2420,9 +2494,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 60.0,
+              "years_with_events": 15,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-04-28",
@@ -2471,9 +2555,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 60.0
             },
             "climate_checks": [
               {
@@ -2616,9 +2702,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 60.0,
+              "years_with_events": 15,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-04-29",
@@ -2667,9 +2763,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 60.0
             },
             "climate_checks": [
               {
@@ -2812,9 +2910,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 60.0,
+              "years_with_events": 15,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-04-30",
@@ -2863,9 +2971,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 64.0
             },
             "climate_checks": [
               {
@@ -3008,9 +3118,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 64.0,
+              "years_with_events": 16,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-05-01",
@@ -3059,9 +3179,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 64.0
             },
             "climate_checks": [
               {
@@ -3204,9 +3326,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 64.0,
+              "years_with_events": 16,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-05-02",
@@ -3255,9 +3387,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 64.0
             },
             "climate_checks": [
               {
@@ -3400,9 +3534,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 64.0,
+              "years_with_events": 16,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-05-03",
@@ -3451,9 +3595,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 64.0
             },
             "climate_checks": [
               {
@@ -3596,9 +3742,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 64.0,
+              "years_with_events": 16,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-05-04",
@@ -3647,9 +3803,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 68.0
             },
             "climate_checks": [
               {
@@ -3792,9 +3950,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 68.0,
+              "years_with_events": 17,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-05-05",
@@ -3843,9 +4011,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 68.0
             },
             "climate_checks": [
               {
@@ -3988,9 +4158,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 68.0,
+              "years_with_events": 17,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-05-06",
@@ -4039,9 +4219,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 68.0
             },
             "climate_checks": [
               {
@@ -4184,9 +4366,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 68.0,
+              "years_with_events": 17,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-05-07",
@@ -4235,9 +4427,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 68.0
             },
             "climate_checks": [
               {
@@ -4380,9 +4574,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 68.0,
+              "years_with_events": 17,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-05-08",
@@ -4431,9 +4635,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 68.0
             },
             "climate_checks": [
               {
@@ -4576,9 +4782,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 68.0,
+              "years_with_events": 17,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-05-09",
@@ -4627,9 +4843,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 68.0
             },
             "climate_checks": [
               {
@@ -4772,9 +4990,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 68.0,
+              "years_with_events": 17,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-05-10",
@@ -4823,9 +5051,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 64.0
             },
             "climate_checks": [
               {
@@ -4968,9 +5198,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 64.0,
+              "years_with_events": 16,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-05-11",
@@ -5019,9 +5259,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 64.0
             },
             "climate_checks": [
               {
@@ -5164,9 +5406,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 64.0,
+              "years_with_events": 16,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-05-12",
@@ -5215,9 +5467,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 68.0
             },
             "climate_checks": [
               {
@@ -5360,9 +5614,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 68.0,
+              "years_with_events": 17,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-05-13",
@@ -5411,9 +5675,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 68.0
             },
             "climate_checks": [
               {
@@ -5556,9 +5822,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 68.0,
+              "years_with_events": 17,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-05-14",
@@ -5607,9 +5883,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 68.0
             },
             "climate_checks": [
               {
@@ -5752,9 +6030,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 68.0,
+              "years_with_events": 17,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-05-15",
@@ -5803,9 +6091,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 68.0
             },
             "climate_checks": [
               {
@@ -5948,9 +6238,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 68.0,
+              "years_with_events": 17,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-05-16",
@@ -5999,9 +6299,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 76.0
             },
             "climate_checks": [
               {
@@ -6144,9 +6446,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 76.0,
+              "years_with_events": 19,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-05-17",
@@ -6195,9 +6507,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 76.0
             },
             "climate_checks": [
               {
@@ -6340,9 +6654,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 76.0,
+              "years_with_events": 19,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-05-18",
@@ -6391,9 +6715,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 76.0
             },
             "climate_checks": [
               {
@@ -6536,9 +6862,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 76.0,
+              "years_with_events": 19,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-05-19",
@@ -6587,9 +6923,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 76.0
             },
             "climate_checks": [
               {
@@ -6732,9 +7070,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 76.0,
+              "years_with_events": 19,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           },
           {
             "date": "2027-05-20",
@@ -6783,9 +7131,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 76.0
             },
             "climate_checks": [
               {
@@ -6928,9 +7278,19 @@
               ],
               "blocking_checks": [],
               "validation_status": "exploratory",
-              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 76.0,
+              "years_with_events": 19,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
             },
-            "phases_status": "available_as_user_scenario"
+            "phases_status": "available_as_user_scenario",
+            "risk_level": "high"
           }
         ],
         "best_historical_date": null,
@@ -7110,9 +7470,11 @@
               "sample_count": 25
             }
           },
-          "risk_level": null,
+          "risk_level": "high",
           "favorable_frequency_pct": null,
-          "risk_status": "unavailable_without_validated_agronomic_profile"
+          "risk_status": "exploratory_exposure",
+          "risk_basis": "historical_configured_event_frequency",
+          "exposure_frequency_pct": 60.0
         },
         "yearly_exposure": [
           {
@@ -8664,7 +9026,16 @@
           ],
           "blocking_checks": [],
           "validation_status": "exploratory",
-          "interpretation": "historical_scenario_criteria_match_not_crop_success_probability"
+          "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+          "risk_level": "high",
+          "exposure_frequency_pct": 60.0,
+          "years_with_events": 15,
+          "risk_basis": "historical_configured_event_frequency",
+          "classification_version": "historical-exposure-v1",
+          "classification_thresholds": {
+            "low_max_pct": 20,
+            "moderate_max_pct": 40
+          }
         },
         "phases_status": "available_as_user_scenario",
         "phases": [
@@ -8712,9 +9083,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 60.0
             },
             "yearly_exposure": [
               {
@@ -9192,9 +9565,534 @@
                   "longest_dry_spell_days_lt_1mm": 4
                 }
               }
-            ]
+            ],
+            "climate_checks": [
+              {
+                "definition": {
+                  "type": "rainfall_total",
+                  "phase": "cycle",
+                  "variable": "PRECTOTCORR",
+                  "min_mm": 500,
+                  "max_mm": null,
+                  "status": "exploratory_rainfall_benchmark",
+                  "description": "Whole-cycle gross rainfall compared with an explicit scenario benchmark; does not establish crop water sufficiency.",
+                  "include_in_assessment": true,
+                  "source_id": "embrapa_corn_water"
+                },
+                "phase": "cycle",
+                "variable": "PRECTOTCORR",
+                "unit": "mm",
+                "status": "available",
+                "reason": null,
+                "summary": {
+                  "mean": 484.0338738425988,
+                  "median": 489.70741715486065,
+                  "minimum": 308.6986935511668,
+                  "maximum": 817.6823127310695
+                },
+                "yearly_results": [
+                  {
+                    "year": 2001,
+                    "status": "available",
+                    "value": 308.6986935511668,
+                    "event_occurred": true,
+                    "historical_start": "2001-04-25",
+                    "historical_end": "2001-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2002,
+                    "status": "available",
+                    "value": 373.0327792218118,
+                    "event_occurred": true,
+                    "historical_start": "2002-04-25",
+                    "historical_end": "2002-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2003,
+                    "status": "available",
+                    "value": 309.1580320549283,
+                    "event_occurred": true,
+                    "historical_start": "2003-04-25",
+                    "historical_end": "2003-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2004,
+                    "status": "available",
+                    "value": 469.47942615504263,
+                    "event_occurred": true,
+                    "historical_start": "2004-04-25",
+                    "historical_end": "2004-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2005,
+                    "status": "available",
+                    "value": 603.8893277815409,
+                    "event_occurred": false,
+                    "historical_start": "2005-04-25",
+                    "historical_end": "2005-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2006,
+                    "status": "available",
+                    "value": 369.7756120213933,
+                    "event_occurred": true,
+                    "historical_start": "2006-04-25",
+                    "historical_end": "2006-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2007,
+                    "status": "available",
+                    "value": 555.6845177948867,
+                    "event_occurred": false,
+                    "historical_start": "2007-04-25",
+                    "historical_end": "2007-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2008,
+                    "status": "available",
+                    "value": 494.5967217555552,
+                    "event_occurred": true,
+                    "historical_start": "2008-04-25",
+                    "historical_end": "2008-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2009,
+                    "status": "available",
+                    "value": 629.4793114913261,
+                    "event_occurred": false,
+                    "historical_start": "2009-04-25",
+                    "historical_end": "2009-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2010,
+                    "status": "available",
+                    "value": 412.4613855944194,
+                    "event_occurred": true,
+                    "historical_start": "2010-04-25",
+                    "historical_end": "2010-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2011,
+                    "status": "available",
+                    "value": 770.6853092895458,
+                    "event_occurred": false,
+                    "historical_start": "2011-04-25",
+                    "historical_end": "2011-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2012,
+                    "status": "available",
+                    "value": 396.09668195437496,
+                    "event_occurred": true,
+                    "historical_start": "2012-04-25",
+                    "historical_end": "2012-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2013,
+                    "status": "available",
+                    "value": 539.5654038218886,
+                    "event_occurred": false,
+                    "historical_start": "2013-04-25",
+                    "historical_end": "2013-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2014,
+                    "status": "available",
+                    "value": 417.09591843652197,
+                    "event_occurred": true,
+                    "historical_start": "2014-04-25",
+                    "historical_end": "2014-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2015,
+                    "status": "available",
+                    "value": 360.6740645443007,
+                    "event_occurred": true,
+                    "historical_start": "2015-04-25",
+                    "historical_end": "2015-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2016,
+                    "status": "available",
+                    "value": 346.74963782489465,
+                    "event_occurred": true,
+                    "historical_start": "2016-04-25",
+                    "historical_end": "2016-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2017,
+                    "status": "available",
+                    "value": 548.4021489051956,
+                    "event_occurred": false,
+                    "historical_start": "2017-04-25",
+                    "historical_end": "2017-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2018,
+                    "status": "available",
+                    "value": 316.88042976665383,
+                    "event_occurred": true,
+                    "historical_start": "2018-04-25",
+                    "historical_end": "2018-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2019,
+                    "status": "available",
+                    "value": 495.2458771049943,
+                    "event_occurred": true,
+                    "historical_start": "2019-04-25",
+                    "historical_end": "2019-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2020,
+                    "status": "available",
+                    "value": 575.9158940074553,
+                    "event_occurred": false,
+                    "historical_start": "2020-04-25",
+                    "historical_end": "2020-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2021,
+                    "status": "available",
+                    "value": 340.9568084844991,
+                    "event_occurred": true,
+                    "historical_start": "2021-04-25",
+                    "historical_end": "2021-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2022,
+                    "status": "available",
+                    "value": 817.6823127310695,
+                    "event_occurred": false,
+                    "historical_start": "2022-04-25",
+                    "historical_end": "2022-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2023,
+                    "status": "available",
+                    "value": 570.0416028327148,
+                    "event_occurred": false,
+                    "historical_start": "2023-04-25",
+                    "historical_end": "2023-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2024,
+                    "status": "available",
+                    "value": 489.70741715486065,
+                    "event_occurred": true,
+                    "historical_start": "2024-04-25",
+                    "historical_end": "2024-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2025,
+                    "status": "available",
+                    "value": 588.891531783928,
+                    "event_occurred": false,
+                    "historical_start": "2025-04-25",
+                    "historical_end": "2025-08-22",
+                    "days": 120
+                  }
+                ],
+                "evaluated_years": 25,
+                "excluded_years": [],
+                "event_years": 15,
+                "historical_event_frequency_pct": 60.0,
+                "risk_percentage": null,
+                "interpretation": "descriptive_or_exploratory_exposure_not_crop_loss_probability",
+                "window": {
+                  "id": "cycle",
+                  "name": "Complete user-selected cycle",
+                  "start_day": 0,
+                  "end_day": 119
+                },
+                "event_definition": "phase_total_strictly_outside_configured_bounds"
+              }
+            ],
+            "scenario_assessment": {
+              "status": "available",
+              "reason": null,
+              "method": "all_included_checks_without_events",
+              "evaluated_years": 25,
+              "years_meeting_criteria": 10,
+              "years_not_meeting_criteria": 15,
+              "scenario_criteria_met_pct": 40.0,
+              "excluded_years": [],
+              "yearly_assessment": [
+                {
+                  "year": 2001,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2002,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2003,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2004,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2005,
+                  "status": "evaluated",
+                  "criteria_met": true,
+                  "failed_checks": []
+                },
+                {
+                  "year": 2006,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2007,
+                  "status": "evaluated",
+                  "criteria_met": true,
+                  "failed_checks": []
+                },
+                {
+                  "year": 2008,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2009,
+                  "status": "evaluated",
+                  "criteria_met": true,
+                  "failed_checks": []
+                },
+                {
+                  "year": 2010,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2011,
+                  "status": "evaluated",
+                  "criteria_met": true,
+                  "failed_checks": []
+                },
+                {
+                  "year": 2012,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2013,
+                  "status": "evaluated",
+                  "criteria_met": true,
+                  "failed_checks": []
+                },
+                {
+                  "year": 2014,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2015,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2016,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2017,
+                  "status": "evaluated",
+                  "criteria_met": true,
+                  "failed_checks": []
+                },
+                {
+                  "year": 2018,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2019,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2020,
+                  "status": "evaluated",
+                  "criteria_met": true,
+                  "failed_checks": []
+                },
+                {
+                  "year": 2021,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2022,
+                  "status": "evaluated",
+                  "criteria_met": true,
+                  "failed_checks": []
+                },
+                {
+                  "year": 2023,
+                  "status": "evaluated",
+                  "criteria_met": true,
+                  "failed_checks": []
+                },
+                {
+                  "year": 2024,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2025,
+                  "status": "evaluated",
+                  "criteria_met": true,
+                  "failed_checks": []
+                }
+              ],
+              "included_checks": [
+                {
+                  "type": "rainfall_total",
+                  "phase": "cycle",
+                  "variable": "PRECTOTCORR"
+                }
+              ],
+              "blocking_checks": [],
+              "validation_status": "exploratory",
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 60.0,
+              "years_with_events": 15,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
+            },
+            "risk_level": "high",
+            "risk_level_reason": null
           }
-        ]
+        ],
+        "risk_level": "high"
       }
     },
     {
@@ -9250,9 +10148,11 @@
                   "sample_count": 25
                 }
               },
-              "risk_level": null,
+              "risk_level": "high",
               "favorable_frequency_pct": null,
-              "risk_status": "unavailable_without_validated_agronomic_profile"
+              "risk_status": "exploratory_exposure",
+              "risk_basis": "historical_configured_event_frequency",
+              "exposure_frequency_pct": 60.0
             },
             "yearly_exposure": [
               {
@@ -9730,7 +10630,531 @@
                   "longest_dry_spell_days_lt_1mm": 4
                 }
               }
-            ]
+            ],
+            "climate_checks": [
+              {
+                "definition": {
+                  "type": "rainfall_total",
+                  "phase": "cycle",
+                  "variable": "PRECTOTCORR",
+                  "min_mm": 500,
+                  "max_mm": null,
+                  "status": "exploratory_rainfall_benchmark",
+                  "description": "Whole-cycle gross rainfall compared with an explicit scenario benchmark; does not establish crop water sufficiency.",
+                  "include_in_assessment": true,
+                  "source_id": "embrapa_corn_water"
+                },
+                "phase": "cycle",
+                "variable": "PRECTOTCORR",
+                "unit": "mm",
+                "status": "available",
+                "reason": null,
+                "summary": {
+                  "mean": 484.0338738425988,
+                  "median": 489.70741715486065,
+                  "minimum": 308.6986935511668,
+                  "maximum": 817.6823127310695
+                },
+                "yearly_results": [
+                  {
+                    "year": 2001,
+                    "status": "available",
+                    "value": 308.6986935511668,
+                    "event_occurred": true,
+                    "historical_start": "2001-04-25",
+                    "historical_end": "2001-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2002,
+                    "status": "available",
+                    "value": 373.0327792218118,
+                    "event_occurred": true,
+                    "historical_start": "2002-04-25",
+                    "historical_end": "2002-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2003,
+                    "status": "available",
+                    "value": 309.1580320549283,
+                    "event_occurred": true,
+                    "historical_start": "2003-04-25",
+                    "historical_end": "2003-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2004,
+                    "status": "available",
+                    "value": 469.47942615504263,
+                    "event_occurred": true,
+                    "historical_start": "2004-04-25",
+                    "historical_end": "2004-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2005,
+                    "status": "available",
+                    "value": 603.8893277815409,
+                    "event_occurred": false,
+                    "historical_start": "2005-04-25",
+                    "historical_end": "2005-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2006,
+                    "status": "available",
+                    "value": 369.7756120213933,
+                    "event_occurred": true,
+                    "historical_start": "2006-04-25",
+                    "historical_end": "2006-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2007,
+                    "status": "available",
+                    "value": 555.6845177948867,
+                    "event_occurred": false,
+                    "historical_start": "2007-04-25",
+                    "historical_end": "2007-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2008,
+                    "status": "available",
+                    "value": 494.5967217555552,
+                    "event_occurred": true,
+                    "historical_start": "2008-04-25",
+                    "historical_end": "2008-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2009,
+                    "status": "available",
+                    "value": 629.4793114913261,
+                    "event_occurred": false,
+                    "historical_start": "2009-04-25",
+                    "historical_end": "2009-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2010,
+                    "status": "available",
+                    "value": 412.4613855944194,
+                    "event_occurred": true,
+                    "historical_start": "2010-04-25",
+                    "historical_end": "2010-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2011,
+                    "status": "available",
+                    "value": 770.6853092895458,
+                    "event_occurred": false,
+                    "historical_start": "2011-04-25",
+                    "historical_end": "2011-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2012,
+                    "status": "available",
+                    "value": 396.09668195437496,
+                    "event_occurred": true,
+                    "historical_start": "2012-04-25",
+                    "historical_end": "2012-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2013,
+                    "status": "available",
+                    "value": 539.5654038218886,
+                    "event_occurred": false,
+                    "historical_start": "2013-04-25",
+                    "historical_end": "2013-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2014,
+                    "status": "available",
+                    "value": 417.09591843652197,
+                    "event_occurred": true,
+                    "historical_start": "2014-04-25",
+                    "historical_end": "2014-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2015,
+                    "status": "available",
+                    "value": 360.6740645443007,
+                    "event_occurred": true,
+                    "historical_start": "2015-04-25",
+                    "historical_end": "2015-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2016,
+                    "status": "available",
+                    "value": 346.74963782489465,
+                    "event_occurred": true,
+                    "historical_start": "2016-04-25",
+                    "historical_end": "2016-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2017,
+                    "status": "available",
+                    "value": 548.4021489051956,
+                    "event_occurred": false,
+                    "historical_start": "2017-04-25",
+                    "historical_end": "2017-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2018,
+                    "status": "available",
+                    "value": 316.88042976665383,
+                    "event_occurred": true,
+                    "historical_start": "2018-04-25",
+                    "historical_end": "2018-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2019,
+                    "status": "available",
+                    "value": 495.2458771049943,
+                    "event_occurred": true,
+                    "historical_start": "2019-04-25",
+                    "historical_end": "2019-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2020,
+                    "status": "available",
+                    "value": 575.9158940074553,
+                    "event_occurred": false,
+                    "historical_start": "2020-04-25",
+                    "historical_end": "2020-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2021,
+                    "status": "available",
+                    "value": 340.9568084844991,
+                    "event_occurred": true,
+                    "historical_start": "2021-04-25",
+                    "historical_end": "2021-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2022,
+                    "status": "available",
+                    "value": 817.6823127310695,
+                    "event_occurred": false,
+                    "historical_start": "2022-04-25",
+                    "historical_end": "2022-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2023,
+                    "status": "available",
+                    "value": 570.0416028327148,
+                    "event_occurred": false,
+                    "historical_start": "2023-04-25",
+                    "historical_end": "2023-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2024,
+                    "status": "available",
+                    "value": 489.70741715486065,
+                    "event_occurred": true,
+                    "historical_start": "2024-04-25",
+                    "historical_end": "2024-08-22",
+                    "days": 120
+                  },
+                  {
+                    "year": 2025,
+                    "status": "available",
+                    "value": 588.891531783928,
+                    "event_occurred": false,
+                    "historical_start": "2025-04-25",
+                    "historical_end": "2025-08-22",
+                    "days": 120
+                  }
+                ],
+                "evaluated_years": 25,
+                "excluded_years": [],
+                "event_years": 15,
+                "historical_event_frequency_pct": 60.0,
+                "risk_percentage": null,
+                "interpretation": "descriptive_or_exploratory_exposure_not_crop_loss_probability",
+                "window": {
+                  "id": "cycle",
+                  "name": "Complete user-selected cycle",
+                  "start_day": 0,
+                  "end_day": 119
+                },
+                "event_definition": "phase_total_strictly_outside_configured_bounds"
+              }
+            ],
+            "scenario_assessment": {
+              "status": "available",
+              "reason": null,
+              "method": "all_included_checks_without_events",
+              "evaluated_years": 25,
+              "years_meeting_criteria": 10,
+              "years_not_meeting_criteria": 15,
+              "scenario_criteria_met_pct": 40.0,
+              "excluded_years": [],
+              "yearly_assessment": [
+                {
+                  "year": 2001,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2002,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2003,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2004,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2005,
+                  "status": "evaluated",
+                  "criteria_met": true,
+                  "failed_checks": []
+                },
+                {
+                  "year": 2006,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2007,
+                  "status": "evaluated",
+                  "criteria_met": true,
+                  "failed_checks": []
+                },
+                {
+                  "year": 2008,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2009,
+                  "status": "evaluated",
+                  "criteria_met": true,
+                  "failed_checks": []
+                },
+                {
+                  "year": 2010,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2011,
+                  "status": "evaluated",
+                  "criteria_met": true,
+                  "failed_checks": []
+                },
+                {
+                  "year": 2012,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2013,
+                  "status": "evaluated",
+                  "criteria_met": true,
+                  "failed_checks": []
+                },
+                {
+                  "year": 2014,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2015,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2016,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2017,
+                  "status": "evaluated",
+                  "criteria_met": true,
+                  "failed_checks": []
+                },
+                {
+                  "year": 2018,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2019,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2020,
+                  "status": "evaluated",
+                  "criteria_met": true,
+                  "failed_checks": []
+                },
+                {
+                  "year": 2021,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2022,
+                  "status": "evaluated",
+                  "criteria_met": true,
+                  "failed_checks": []
+                },
+                {
+                  "year": 2023,
+                  "status": "evaluated",
+                  "criteria_met": true,
+                  "failed_checks": []
+                },
+                {
+                  "year": 2024,
+                  "status": "evaluated",
+                  "criteria_met": false,
+                  "failed_checks": [
+                    {
+                      "type": "rainfall_total",
+                      "phase": "cycle"
+                    }
+                  ]
+                },
+                {
+                  "year": 2025,
+                  "status": "evaluated",
+                  "criteria_met": true,
+                  "failed_checks": []
+                }
+              ],
+              "included_checks": [
+                {
+                  "type": "rainfall_total",
+                  "phase": "cycle",
+                  "variable": "PRECTOTCORR"
+                }
+              ],
+              "blocking_checks": [],
+              "validation_status": "exploratory",
+              "interpretation": "historical_scenario_criteria_match_not_crop_success_probability",
+              "risk_level": "high",
+              "exposure_frequency_pct": 60.0,
+              "years_with_events": 15,
+              "risk_basis": "historical_configured_event_frequency",
+              "classification_version": "historical-exposure-v1",
+              "classification_thresholds": {
+                "low_max_pct": 20,
+                "moderate_max_pct": 40
+              }
+            },
+            "risk_level": "high",
+            "risk_level_reason": null
           }
         ]
       }
@@ -9744,7 +11168,7 @@
           "code": "ANALYSIS_NOT_FOUND",
           "message": "The analysis was not found.",
           "details": {},
-          "request_id": "d84b12262c1e4650ba0d311d1aa384d1"
+          "request_id": "603d5560319842e7b1b66f96e65802a6"
         }
       }
     }

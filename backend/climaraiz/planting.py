@@ -11,7 +11,7 @@ import pandas as pd
 from .climate import json_safe
 from .checks import evaluate_check
 from .models import ScenarioPhase
-from .scenario import assess_scenario
+from .scenario import assess_scenario, classify_exposure
 from .errors import DomainError
 from .settings import MODEL_VERSION, MUNICIPALITY, PACKAGE_DIR
 
@@ -119,7 +119,7 @@ class PlantingService:
                 "precipitation": {"status": "available" if rain else "unavailable", "evaluated_years": len(rain),
                  "total_mm": summary([r["total_mm"] for r in rain]),
                  "longest_dry_spell_days": summary([r["longest_dry_spell_days_lt_1mm"] for r in rain])},
-                "risk_level": None, "favorable_frequency_pct": None,
+                "risk_level": "not_supported", "favorable_frequency_pct": None,
                 "risk_status": "unavailable_without_validated_agronomic_profile"}
 
     def process(self, analysis_id, request):
@@ -203,6 +203,29 @@ class PlantingService:
             return {"analysis_id": analysis_id, "status": row["status"], "progress": row["progress"],
                     "error": json.loads(row["error_json"]) if row["error_json"] else None}
         result = json.loads(row["result_json"])
+        # Derive phase summaries from the saved checks and policy, including for
+        # existing analyses. Never apply today's configuration to an old result.
+        period = result["historical_period"]
+        for item in result["dates"]:
+            overall = classify_exposure(item.get("scenario_assessment", {"status": "unavailable"}))
+            item["scenario_assessment"] = overall
+            item["risk_level"] = overall["risk_level"]
+            item["historical_assessment"].update(
+                risk_level=overall["risk_level"], risk_basis=overall["risk_basis"],
+                exposure_frequency_pct=overall["exposure_frequency_pct"],
+                risk_status="exploratory_exposure" if overall["risk_level"] != "not_supported" else "not_supported")
+            for phase in item.get("phases", []):
+                phase_checks = [check for check in item.get("climate_checks", [])
+                                if check["phase"] == phase["id"]]
+                policy = result.get("assessment_configuration", {})
+                phase_scenario = assess_scenario(phase_checks, period["start_year"], period["end_year"], policy)
+                phase["assessment"].update(
+                    risk_level=phase_scenario["risk_level"], risk_basis=phase_scenario["risk_basis"],
+                    exposure_frequency_pct=phase_scenario["exposure_frequency_pct"],
+                    risk_status="exploratory_exposure" if phase_scenario["risk_level"] != "not_supported" else "not_supported")
+                phase.update(climate_checks=phase_checks, scenario_assessment=phase_scenario,
+                             risk_level=phase_scenario["risk_level"],
+                             risk_level_reason=phase_scenario["reason"])
         if not include_details:
             result["dates"] = [{k: v for k, v in item.items() if k not in ("yearly_exposure", "phases")} for item in result["dates"]]
             for item in result["dates"]:

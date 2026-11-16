@@ -63,7 +63,7 @@ function prettyDate(value){return new Date(value+'T12:00:00Z').toLocaleDateStrin
 function metricMean(indicator,key){return indicator?.[key]?.mean ?? null;}
 function scenarioCell(scenario){
   if(scenario?.status!=="available")return '<span title="Define all required phase windows and provide complete data">Unavailable</span>';
-  return `${format(scenario.scenario_criteria_met_pct)}%<br><small>${scenario.years_meeting_criteria}/${scenario.evaluated_years} years</small>`;
+  return `${format(scenario.scenario_criteria_met_pct)}%<br><small>${scenario.years_meeting_criteria}/${scenario.evaluated_years} years</small><br><small>${escapeHtml(scenario.risk_level)} exposure</small>`;
 }
 function appendScenarioAssessment(scenario){
   const section=document.createElement("section");section.className="scenario-summary";
@@ -75,7 +75,7 @@ function appendScenarioAssessment(scenario){
       (phases.length?`Check the required windows: ${phases.join(', ')}.`:'No common complete evaluation years may be available.');
     section.appendChild(note);
   }else{
-    section.innerHTML=`<div class="eyebrow">HISTORICAL SCENARIO CRITERIA MATCH</div><div class="scenario-percentage">${format(scenario.scenario_criteria_met_pct)}%</div><p>${scenario.years_meeting_criteria} of ${scenario.evaluated_years} complete historical years met every included criterion.</p><p class="small-note">${scenario.excluded_years.length} years excluded. This is not a probability of crop success, crop loss, or an official ZARC risk category.</p>`;
+    section.innerHTML=`<div class="eyebrow">HISTORICAL SCENARIO CRITERIA MATCH</div><div class="scenario-percentage">${format(scenario.scenario_criteria_met_pct)}%</div><p><strong>${escapeHtml(scenario.risk_level)} climate exposure</strong> · ${format(scenario.exposure_frequency_pct)}% of evaluated years had at least one configured event.</p><p>${scenario.years_meeting_criteria} of ${scenario.evaluated_years} complete historical years met every included criterion.</p><p class="small-note">${scenario.excluded_years.length} years excluded. This is not a probability of crop success, crop loss, or an official ZARC risk category.</p>`;
   }
   $("date-detail").appendChild(section);
 }

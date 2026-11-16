@@ -3,7 +3,7 @@
   "info": {
     "title": "ClimaRaiz API",
     "description": "Historical climate exposure and user-supplied planting windows. No online ZARC integration, yield prediction, or unvalidated crop-risk scores.",
-    "version": "0.2.0"
+    "version": "0.3.0"
   },
   "paths": {
     "/health": {

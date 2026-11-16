@@ -1,7 +1,7 @@
 """Joint annual assessment, completeness, boundaries, and numerical reference scenario."""
 import pytest
 
-from climaraiz.scenario import assess_scenario, METHOD
+from climaraiz.scenario import assess_scenario, classify_exposure, METHOD
 
 
 def check(events, kind="heat_days", phase="flowering", included=True):
@@ -25,6 +25,9 @@ def test_joint_conditions_are_not_average_of_percentages_or_double_counted():
     assert result["years_meeting_criteria"] == 1
     assert result["years_not_meeting_criteria"] == 3  # Both events in 2023 still count once.
     assert len(result["yearly_assessment"][-1]["failed_checks"]) == 2
+    assert result["years_with_events"] == 3
+    assert result["exposure_frequency_pct"] == 75
+    assert result["risk_level"] == "high"
 
 
 @pytest.mark.parametrize("event,percentage,matched", [(True, 0, 0), (False, 100, 1)])
@@ -40,6 +43,8 @@ def test_only_common_complete_years_form_denominator():
                      check({2020: None, 2021: False, 2022: True}, kind="dry_spell")], last=2022)
     assert result["evaluated_years"] == 1
     assert result["scenario_criteria_met_pct"] == 100
+    assert result["exposure_frequency_pct"] == 0
+    assert result["risk_level"] == "low"
     assert [r["year"] for r in result["excluded_years"]] == [2020, 2022]
 
 
@@ -96,7 +101,9 @@ def test_reference_corn_scenario_and_calendar_detail_consistency(client, plantin
     detail = client.get(created["links"]["result"] + "/dates/2027-04-25").json()
     assert len(detail["scenario_assessment"]["yearly_assessment"]) == 25
     assert detail["scenario_assessment"]["scenario_criteria_met_pct"] == result["scenario_criteria_met_pct"]
-    assert detail["historical_assessment"]["risk_level"] is None
+    assert detail["historical_assessment"]["risk_level"] == "high"
+    assert detail["risk_level"] == "high"
+    assert detail["scenario_assessment"]["exposure_frequency_pct"] == 60
     assert detail["historical_assessment"]["favorable_frequency_pct"] is None
     assert next(c for c in detail["climate_checks"] if c["phase"] == "cycle")["window"]["end_day"] == 119
     assert client.post("/api/v1/planting/analyses", json=planting_request).json()["reused"] is True
@@ -108,6 +115,8 @@ def test_missing_phase_blocks_score_but_automatic_cycle_check_still_runs(client,
     for record in result["dates"]:
         assert record["scenario_assessment"]["scenario_criteria_met_pct"] is None
         assert record["scenario_assessment"]["reason"] == "REQUIRED_CHECK_UNAVAILABLE"
+        assert record["risk_level"] == "not_supported"
+        assert record["scenario_assessment"]["exposure_frequency_pct"] is None
         assert next(c for c in record["climate_checks"] if c["phase"] == "cycle")["status"] == "available"
 
 
@@ -145,3 +154,75 @@ def test_other_crops_use_own_rules_and_exclude_descriptive_temperature(client, p
         assert heat["definition"]["threshold_c"] == 30
     else:
         assert len(first["scenario_assessment"]["included_checks"]) == 2
+
+
+def test_phase_route_uses_only_saved_rules_for_that_phase(client, planting_request):
+    planting_request['phases'] = [
+        {'id': 'initial', 'name': 'Initial', 'start_day': 0, 'end_day': 39},
+        {'id': 'flowering', 'name': 'Flowering', 'start_day': 40, 'end_day': 65},
+        {'id': 'remaining', 'name': 'Remaining', 'start_day': 66, 'end_day': 119}]
+    planting_request['check_windows'] = [corn_windows()[1]]
+    created = client.post('/api/v1/planting/analyses', json=planting_request).json()
+    url = created['links']['result'] + '/dates/2027-04-25'
+    response = client.get(url + '/phases')
+    assert response.status_code == 200
+    phases = response.json()['phases']
+    flowering = phases[1]
+    score = flowering['scenario_assessment']
+    assert score['evaluated_years'] == 25
+    assert score['years_meeting_criteria'] == 19
+    assert score['scenario_criteria_met_pct'] == 76
+    assert len(flowering['climate_checks']) == 1
+    assert flowering['climate_checks'][0]['definition']['type'] == 'dry_spell'
+    assert flowering['risk_level'] == 'moderate'
+    assert flowering['assessment']['risk_level'] == 'moderate'
+    assert score['exposure_frequency_pct'] == 24
+    assert score['years_with_events'] == 6
+    assert phases[0]['risk_level'] == 'not_supported'
+    assert flowering['risk_level_reason'] is None
+    assert phases[0]['scenario_assessment']['reason'] == 'NO_CHECKS_INCLUDED'
+    assert phases[0]['scenario_assessment']['scenario_criteria_met_pct'] is None
+    assert 'assessment_message' not in phases[0]
+    assert 'assessment_message' not in flowering
+    detail = client.get(url).json()
+    assert detail['phases'] == phases
+    assert detail['scenario_assessment']['scenario_criteria_met_pct'] == 40
+    # Existing saved analyses receive the new response fields without rewriting
+    # observations or replacing their saved checks with the current configuration.
+    client.app.state.planting.windows['assessment']['method'] = 'changed_after_processing'
+    assert client.get(url + '/phases').json()['phases'] == phases
+
+
+def test_phase_score_excludes_missing_year_and_cannot_borrow_cycle_rules(client, planting_request):
+    with client.app.state.database.connect() as db:
+        db.execute("UPDATE climate_daily SET value=NULL WHERE source_id='precipitation' AND date='2024-06-10'")
+    planting_request['phases'] = [
+        {'id': 'initial', 'name': 'Initial', 'start_day': 0, 'end_day': 39},
+        {'id': 'flowering', 'name': 'Flowering', 'start_day': 40, 'end_day': 65},
+        {'id': 'remaining', 'name': 'Remaining', 'start_day': 66, 'end_day': 119}]
+    created = client.post('/api/v1/planting/analyses', json=planting_request).json()
+    url = created['links']['result'] + '/dates/2027-04-25/phases'
+    phases = client.get(url).json()['phases']
+    score = phases[1]['scenario_assessment']
+    assert score['status'] == 'available'  # Missing pollination blocks only the full cycle.
+    assert score['evaluated_years'] == 24
+    assert [r['year'] for r in score['excluded_years']] == [2024]
+    assert phases[2]['scenario_assessment']['status'] == 'unavailable'
+
+
+@pytest.mark.parametrize("events,level", [(0, "low"), (2000, "low"), (2001, "moderate"),
+                                           (4000, "moderate"), (4001, "high"), (10000, "high")])
+def test_exposure_classification_inclusive_boundaries(events, level):
+    result = classify_exposure({"status": "available", "evaluated_years": 10000,
+                                "years_not_meeting_criteria": events})
+    assert result["risk_level"] == level
+    assert result["exposure_frequency_pct"] == pytest.approx(events / 100)
+    assert result["classification_version"] == "historical-exposure-v1"
+
+
+def test_unavailable_or_empty_assessment_never_gets_low_classification():
+    for assessment in [{"status": "unavailable"}, {"status": "available", "evaluated_years": 0},
+                       {"status": "available", "evaluated_years": 25}]:
+        result = classify_exposure(assessment)
+        assert result["risk_level"] == "not_supported"
+        assert result["exposure_frequency_pct"] is None

@@ -79,7 +79,7 @@ def test_analysis_evaluates_every_date_and_reuses_result(client, planting_reques
     assert result["dates"][0]["date"] == "2027-04-21"
     assert result["dates"][-1]["date"] == "2027-05-20"
     assert result["best_historical_date"] is None
-    assert result["dates"][0]["historical_assessment"]["risk_level"] is None
+    assert result["dates"][0]["historical_assessment"]["risk_level"] == "not_supported"
     assessment = result["dates"][0]["historical_assessment"]
     assert assessment["precipitation"]["evaluated_years"] == 25
     assert client.post("/api/v1/planting/analyses", json=planting_request).json()["reused"] is True

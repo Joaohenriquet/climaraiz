@@ -69,7 +69,7 @@ Results include rainfall accumulated over the cycle, the longest run of days wit
 
 Optional phase definitions use inclusive zero-based offsets. They must be ordered, non-overlapping, and cover the cycle exactly. They are explicitly labelled user-defined scenarios. No default germination/flowering dates or agronomic heat/rain thresholds are invented.
 
-**Risk level, favorable frequency, and best planting date are intentionally unavailable** until agronomic profiles are validated. Raw exposure is fully functional and not disguised as a crop-risk model. There are no daily maximum/minimum temperature sources, yield forecasts, or soil-water balance calculations. Rainfall and temperature summaries are not yield or irrigation recommendations.
+**Exploratory climate-exposure levels are available** from historical event frequency. Favorable crop-success frequency and best planting date remain unavailable until agronomic profiles are validated. Raw exposure is fully functional and not disguised as a crop-risk model. There are no daily maximum/minimum temperature sources, yield forecasts, or soil-water balance calculations. Rainfall and temperature summaries are not yield or irrigation recommendations.
 
 ## API
 
@@ -156,7 +156,35 @@ The denominator is the intersection of complete years for every included check. 
 
 The example above reproduces **April 25, 120 days, 2001–2025**, with the illustrative flowering window at days 40–65 and pollination at days 45–55. Ten years meet all three corn criteria; fifteen do not. Individual event frequencies are 60% below the cycle rainfall benchmark, 24% with the configured flowering dry spell, and 0% with the daily-mean heat event. The combined percentage is **40%**, not an average of the individual percentages. These windows are not validated cultivar phenology, and zero heat events do not rule out hot daily maxima.
 
-The date-detail response includes `yearly_assessment` with each year's pass/fail status and failed checks. The calendar omits that detailed list to keep the response smaller while returning the identical percentage, numerator, denominator, configuration, and exclusions. Existing `risk_level`, `favorable_frequency_pct`, `risk_percentage`, and `best_historical_date` remain null. No low/moderate/high grades or success probabilities are inferred. Comparisons across crops are not an agricultural risk ranking because their criteria differ.
+The date-detail response includes `yearly_assessment` with each year's pass/fail status and failed checks. The calendar omits that detailed list to keep the response smaller while returning the identical percentage, numerator, denominator, configuration, and exclusions. Unavailable risk classifications return `risk_level: "not_supported"`. `favorable_frequency_pct`, `risk_percentage`, and `best_historical_date` remain null. The API now supplies exploratory low/moderate/high exposure bands, not crop-success probabilities. Comparisons across crops are not an agricultural risk ranking because their criteria differ.
+
+The `/planting/analyses/{id}/dates/{date}/phases` route also includes `scenario_assessment` and `climate_checks` for each submitted phase, using only checks with that exact phase ID. Phase cards can show `scenario_criteria_met_pct` with its numerator and denominator. No configured checks means an unavailable percentage, not low risk. Each phase returns its own `risk_level` and `risk_level_reason`; unavailable assessment returns `not_supported`, with the technical scenario reason. Existing analyses use their saved rule results and policy, without applying new configuration retroactively.
+
+### Exploratory exposure classification
+
+`exposure_frequency_pct = 100 × years_not_meeting_criteria / evaluated_years`.
+The versioned `historical-exposure-v1` policy classifies unrounded frequency as
+`low` up to and including 20%, `moderate` above 20% through 40%, and `high`
+above 40%. `not_supported` means the assessment is unavailable, not zero risk.
+These are ClimaRaiz MVP presentation bands inspired by ZARC frequency landmarks;
+they are not official ZARC classes or locally validated crop-damage probabilities.
+There is no new minimum historical sample-size filter; always show the evaluated
+and excluded year counts. No confidence intervals or soil-water balance are added
+by this classification.
+
+`risk_level` is exposed on each date, its `historical_assessment`, and
+`scenario_assessment`; the phase route exposes the corresponding per-phase
+values at the phase root, `assessment`, and `scenario_assessment`. The scenario
+object includes `years_with_events`, `risk_basis`, `classification_version` and
+`classification_thresholds`. Both new and saved results receive the current,
+explicitly versioned display classification from their historical event counts;
+old observations and crop-check definitions are not modified.
+
+For the reference corn example, whole-cycle exposure is 15/25 = 60% (`high`),
+whereas a submitted flowering phase has 6/25 = 24% (`moderate`). Phase percentages
+are never averaged into the cycle result. Severity summaries and check-specific
+annual details remain in `climate_checks`; this release does not add a new
+severity-weighted index or claim that events occurred on the same day.
 
 For the front end, use **“Historical years meeting this scenario's criteria”** rather than “probability of success.” See [scenario assessment contract](docs/scenario_assessment.md) and [actual complete API examples](docs/api_examples.json).
 
@@ -177,6 +205,9 @@ The running-server smoke test checks all three crops, the 30-date calendars, com
 ```sh
 .venv/bin/python tests/smoke_server.py
 ```
+
+Use `--base-url http://127.0.0.1:18765` to check an isolated server on another
+port without connecting to the development server on port 8000.
 
 ## Layout
 
@@ -207,3 +238,11 @@ backend/
 - [pyMannKendall](https://joss.theoj.org/papers/10.21105/joss.01556)
 - [statsmodels Ljung–Box](https://www.statsmodels.org/stable/generated/statsmodels.stats.diagnostic.acorr_ljungbox.html)
 - [FastAPI background tasks](https://fastapi.tiangolo.com/tutorial/background-tasks/)
+
+### Real-data classification examples
+
+[Real-data validation](docs/real_data_validation.md) lists reproducible low,
+moderate and high cases using unchanged regional daily observations and rules.
+`tests/test_real_exposure.py` includes direct numerical reference tests and API
+consistency checks for all three classes. All phase timings are illustrative
+scenarios, not cultivar recommendations.
