@@ -16,14 +16,10 @@ def main(base_url="http://127.0.0.1:8000"):
         status = client.get("/api/v1/data/status").json()
         assert all(s["status"] == "available" for s in status["variables"].values())
         for crop_id in (1, 2, 3):
-            response = client.post("/api/v1/planting/analyses", json={
-                "municipality_id": 2504009, "crop_id": crop_id, "planting_year": 2027,
-                "cycle_days": 120, "historical_period": {"start_year": 2001, "end_year": 2025},
-                "phases": [{"id": "first", "name": "First scenario segment", "start_day": 0, "end_day": 29},
-                           {"id": "remaining", "name": "Remaining scenario segment", "start_day": 30, "end_day": 119}],
-                "check_windows": [
-                    {"id": "flowering", "phase_id": "remaining", "name": "Illustrative flowering", "start_day": 40, "end_day": 65},
-                    {"id": "pollination", "phase_id": "remaining", "name": "Illustrative pollination", "start_day": 45, "end_day": 55}]})
+            body = json.loads((Path(__file__).resolve().parents[1] /
+                               "docs/requests/all_phase_analysis.json").read_text())
+            body["crop_id"] = crop_id
+            response = client.post("/api/v1/planting/analyses", json=body)
             response.raise_for_status()
             path = response.json()["links"]["result"]
             for _ in range(100):
@@ -43,12 +39,12 @@ def main(base_url="http://127.0.0.1:8000"):
             assert selected_detail["scenario_assessment"]["scenario_criteria_met_pct"] == selected["scenario_assessment"]["scenario_criteria_met_pct"]
             assert selected["historical_assessment"]["precipitation"]["evaluated_years"] == 25
             detail = client.get(path + "/dates/" + selected["date"] + "/phases").json()
-            assert len(detail["phases"]) == 2
-            assert detail["phases"][0]["risk_level"] == "not_supported"
-            linked = detail["phases"][1]
-            assert linked["scenario_assessment"]["status"] == "available"
-            assert linked["risk_level"] in ("low", "moderate", "high")
-            assert all(check["window"]["phase_id"] == "remaining" for check in linked["climate_checks"])
+            assert len(detail["phases"]) == 4
+            for phase in detail["phases"]:
+                assert phase["risk_level"] in ("low", "moderate", "high")
+                assert phase["scenario_assessment"]["evaluated_years"] == 25
+                assert all(check["window"]["phase_id"] == phase["id"] for check in phase["climate_checks"])
+            assert selected["scenario_assessment"]["omitted_optional_checks"] == []
             assert detail["phases"] == selected_detail["phases"]
             print(f"{crop_id}: 30 dates, 25 common complete years, scenario matching and phase details verified")
         schema = client.get("/openapi.json").json()

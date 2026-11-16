@@ -124,4 +124,5 @@ def test_explicit_whole_cycle_binding_is_not_overwritten_by_automatic_window(cli
     assert len(phase['climate_checks']) == 3
     cycle = next(check for check in phase['climate_checks'] if check['phase'] == 'cycle')
     assert cycle['window']['phase_id'] == 'ciclo'
-    assert phase['scenario_assessment'] == detail['scenario_assessment']
+    assert {k: v for k, v in phase['scenario_assessment'].items() if k != 'omitted_optional_checks'} == {
+        k: v for k, v in detail['scenario_assessment'].items() if k != 'omitted_optional_checks'}

@@ -52,7 +52,7 @@ For the unchanged regional 2001–2025 dataset:
 - `floracao`: 6/25 event years across its two linked windows, 24% exposure,
   76% criteria match, `risk_level: moderate`.
 - Germination, grain filling and maturation: `not_supported` with
-  `risk_level_reason: NO_CHECKS_INCLUDED`; no criteria have been added for them.
+  `risk_level_reason: NO_CHECKS_INCLUDED`; their new optional criteria have no windows in this legacy example.
 
 Each year is counted once even if both checks fail. A linked phase uses only
 common complete years in its included checks, with exclusions preserved. The
@@ -86,7 +86,8 @@ geometric overlap. Unbound separate windows can still contribute to the overall
 assessment without contributing to any phase card.
 
 Bindings are persisted in the saved request, resolved windows and check results.
-The model version is `historical-exposure-v5-phase-bindings`. A new request with
+Bindings were introduced in model `historical-exposure-v5-phase-bindings`;
+API 0.5.0 uses `historical-exposure-v6-minimum-phase-criteria`. A new request with
 bindings produces a new analysis ID. Repeating that same request reuses it.
 Previously completed analyses are not rewritten or silently rebound: the old
 ID retains its old windows and missing-association result. Submit the updated
@@ -101,3 +102,8 @@ explicit whole-cycle associations. Existing exact-ID scenarios remain covered
 by the full suite. `tests/smoke_server.py` also checks explicit bindings for all
 three crops against a running HTTP server. Actual request/response examples are
 in [api_examples.json](api_examples.json).
+
+
+For all four cards to classify under API 0.5.0, use the
+[complete minimum-profile request](requests/all_phase_analysis.json). The example
+above deliberately retains its original limited window set.

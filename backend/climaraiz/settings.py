@@ -9,4 +9,4 @@ DATABASE_PATH = DATA_DIR / "climaraiz.sqlite3"
 MUNICIPALITY = {"id": 2504009, "name": "Campina Grande", "state": "PB", "latitude": -7.222,
                 "longitude": -35.8731}
 EXPECTED_DATA_BBOX = (-35.625, -7.0, -35.625, -7.0)
-MODEL_VERSION = "historical-exposure-v5-phase-bindings"
+MODEL_VERSION = "historical-exposure-v6-minimum-phase-criteria"
