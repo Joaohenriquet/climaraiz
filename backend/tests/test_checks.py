@@ -102,7 +102,8 @@ def test_real_api_exposes_configured_checks_and_overlapping_windows(client, plan
     assert record["scenario_assessment"]["status"] == "available"
     assert len(checks[0]["yearly_results"]) == 25
     assert "yearly_results" not in calendar["dates"][0]["climate_checks"][0]
-    assert record["historical_assessment"]["risk_level"] is None
+    assert record["historical_assessment"]["risk_level"] == record["scenario_assessment"]["risk_level"]
+    assert record["risk_level"] in ("low", "moderate", "high")
 
 
 @pytest.mark.parametrize("window", [
