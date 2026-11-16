@@ -12,7 +12,7 @@ export default function AppHeader({ title, subtitle, backHref = '/' }: AppHeader
     <header className="bg-[#1b4132] flex flex-col gap-1 px-5 pt-4 pb-5 shrink-0">
       <div className="flex items-center gap-2">
         <Link href={backHref} className="size-5 relative shrink-0 flex items-center justify-center">
-          <Image src="/icons/arrow-left.svg" alt="Voltar" width={20} height={20} />
+          <Image src="/icons/arrow-left.svg" alt="Back" width={20} height={20} />
         </Link>
         <span className="text-white text-[17px] font-semibold leading-none">{title}</span>
       </div>

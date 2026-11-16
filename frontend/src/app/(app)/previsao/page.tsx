@@ -11,11 +11,11 @@ import { formatShortDate } from '@/shared/lib/dateUtils'
 import type { AnalysisDate } from '@/shared/lib/types'
 
 function scoreLabel(pct: number | null): { text: string; label: string; color: string } {
-  if (pct == null) return { text: 'Sem avaliação disponível', label: 'Sem dados', color: '#6b7280' }
-  if (pct >= 70) return { text: 'Sua data é excelente', label: 'Favorável', color: '#16a34a' }
-  if (pct >= 50) return { text: 'Boa escolha de data', label: 'Bom', color: '#16a34a' }
-  if (pct >= 30) return { text: 'Atenção para esta data', label: 'Atenção', color: '#da8003' }
-  return { text: 'Data desfavorável historicamente', label: 'Alto risco', color: '#c01b1b' }
+  if (pct == null) return { text: 'No assessment available', label: 'No data', color: '#6b7280' }
+  if (pct >= 70) return { text: 'Excellent planting date', label: 'Favorable', color: '#16a34a' }
+  if (pct >= 50) return { text: 'Good date choice', label: 'Good', color: '#16a34a' }
+  if (pct >= 30) return { text: 'Caution for this date', label: 'Caution', color: '#da8003' }
+  return { text: 'Historically unfavorable date', label: 'High risk', color: '#c01b1b' }
 }
 
 
@@ -24,7 +24,7 @@ function PrevisaoContent() {
   const analysisId = searchParams.get('analysis_id') ?? ''
   const date = searchParams.get('date') ?? ''
   const cropId = searchParams.get('crop_id') ?? ''
-  const cropName = searchParams.get('crop_name') ?? 'Cultura'
+  const cropName = searchParams.get('crop_name') ?? 'Crop'
 
   const [data, setData] = useState<AnalysisDate & { crop_id: number; analysis_id: string } | null>(null)
   const [loading, setLoading] = useState(true)
@@ -34,7 +34,7 @@ function PrevisaoContent() {
     if (!analysisId || !date) return
     getAnalysisDate(analysisId, date)
       .then(setData)
-      .catch(() => setError('Erro ao carregar previsão.'))
+      .catch(() => setError('Failed to load forecast.'))
       .finally(() => setLoading(false))
   }, [analysisId, date])
 
@@ -49,7 +49,7 @@ function PrevisaoContent() {
   return (
     <>
       <AppHeader
-        title="Previsão de Plantio"
+        title="Planting Forecast"
         subtitle={`${cropName} — ${shortDate}`}
         backHref={janelasBack}
       />
@@ -59,7 +59,7 @@ function PrevisaoContent() {
         {loading ? (
           <div className="flex flex-col items-center gap-3 py-16">
             <Spinner />
-            <span className="text-[13px] text-[#6b7280]">Carregando previsão…</span>
+            <span className="text-[13px] text-[#6b7280]">Loading forecast…</span>
           </div>
         ) : error ? (
           <p className="text-[13px] text-[#c01b1b] bg-[#ffebeb] rounded-lg px-3 py-2 w-full">{error}</p>
@@ -77,27 +77,27 @@ function PrevisaoContent() {
               </p>
               {pct != null ? (
                 <p className="text-[13px] text-[#6b7280] text-center leading-[18px] max-w-[310px]">
-                  Em {Math.round(pct)}% dos anos históricos, esta data atendeu a todos os critérios
-                  climáticos configurados para {cropName}.
+                  In {Math.round(pct)}% of historical years, this date met all climate
+                  criteria set for {cropName}.
                 </p>
               ) : (
                 <p className="text-[13px] text-[#6b7280] text-center leading-[18px] max-w-[310px]">
-                  Não há avaliação de cenário disponível para esta data.
+                  No scenario assessment is available for this date.
                 </p>
               )}
             </div>
 
             <a
               href={`/ciclo?${headerParams}`}
-              className="w-full bg-[#0e8038] text-white py-3.5 px-5 rounded-xl text-[15px] font-semibold leading-none text-center block"
+              className="w-full bg-[#0e8038] text-white py-3.5 px-5 rounded-xl text-[15px] font-semibold leading-none text-center block transition active:scale-[0.97]"
             >
-              Ver ciclo da cultura
+              View crop cycle
             </a>
 
             <div className="w-full bg-[#f3f4f6] border border-[#e5e7eb] flex items-center gap-2.5 px-3.5 py-3 rounded-[10px]">
               <Image src="/icons/info.svg" alt="" width={16} height={16} className="shrink-0" />
               <span className="text-[12px] text-[#6b7280] leading-normal">
-                Baseado em 25 anos de dados climáticos históricos (2001–2025) · NASA/MERRA-2.
+                Based on 25 years of historical climate data (2001–2025) · NASA/MERRA-2.
               </span>
             </div>
           </>

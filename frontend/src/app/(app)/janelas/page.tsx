@@ -35,7 +35,7 @@ function JanelasContent() {
   const searchParams = useSearchParams()
   const analysisId = searchParams.get('analysis_id') ?? ''
   const cropId = searchParams.get('crop_id') ?? ''
-  const cropName = searchParams.get('crop_name') ?? 'Cultura'
+  const cropName = searchParams.get('crop_name') ?? 'Crop'
 
   const [analysis, setAnalysis] = useState<Analysis | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -52,7 +52,7 @@ function JanelasContent() {
           if (intervalRef.current) clearInterval(intervalRef.current)
         }
       } catch {
-        setError('Erro ao buscar análise.')
+        setError('Failed to fetch analysis.')
         if (intervalRef.current) clearInterval(intervalRef.current)
       }
     }
@@ -74,8 +74,8 @@ function JanelasContent() {
   return (
     <>
       <AppHeader
-        title="Janelas de Plantio"
-        subtitle={`${cropName} em Campina Grande — PB`}
+        title="Planting Windows"
+        subtitle={`${cropName} in Campina Grande — PB`}
         backHref="/"
       />
 
@@ -86,11 +86,11 @@ function JanelasContent() {
             <Spinner />
             <div className="flex flex-col items-center gap-1">
               <span className="text-[14px] font-semibold text-[#111827]">
-                Analisando janelas de plantio…
+                Analyzing planting windows…
               </span>
               {analysis?.progress != null && (
                 <span className="text-[12px] text-[#6b7280]">
-                  {Math.round(analysis.progress * 100)}% concluído
+                  {Math.round(analysis.progress * 100)}% complete
                 </span>
               )}
             </div>
@@ -99,9 +99,9 @@ function JanelasContent() {
 
         {isFailed && (
           <div className="bg-[#ffebeb] border border-[#fca5a5] rounded-xl px-4 py-4">
-            <p className="text-[14px] font-semibold text-[#c01b1b]">Análise falhou</p>
+            <p className="text-[14px] font-semibold text-[#c01b1b]">Analysis failed</p>
             <p className="text-[13px] text-[#6b7280] mt-1">
-              {analysis?.error?.message ?? 'Tente novamente a partir da tela inicial.'}
+              {analysis?.error?.message ?? 'Try again from the home screen.'}
             </p>
           </div>
         )}
@@ -113,7 +113,7 @@ function JanelasContent() {
         {dates.length > 0 && (
           <>
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[15px] font-semibold text-[#111827]">Janelas de plantio</span>
+              <span className="text-[15px] font-semibold text-[#111827]">Planting windows</span>
               <span className="text-[13px] text-[#6b7280]">{rangeLabel}</span>
             </div>
 

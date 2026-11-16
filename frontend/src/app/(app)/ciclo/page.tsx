@@ -36,7 +36,7 @@ function CicloContent() {
   const analysisId = searchParams.get('analysis_id') ?? ''
   const date = searchParams.get('date') ?? ''
   const cropId = searchParams.get('crop_id') ?? ''
-  const cropName = searchParams.get('crop_name') ?? 'Cultura'
+  const cropName = searchParams.get('crop_name') ?? 'Crop'
 
   const [phases, setPhases] = useState<Phase[]>([])
   const [loading, setLoading] = useState(true)
@@ -46,7 +46,7 @@ function CicloContent() {
     if (!analysisId || !date) return
     getAnalysisDatePhases(analysisId, date)
       .then((res) => setPhases(res.phases))
-      .catch(() => setError('Erro ao carregar fases do ciclo.'))
+      .catch(() => setError('Failed to load cycle phases.'))
       .finally(() => setLoading(false))
   }, [analysisId, date])
 
@@ -56,8 +56,8 @@ function CicloContent() {
   return (
     <>
       <AppHeader
-        title="Ciclo da Cultura"
-        subtitle={`${cropName} — início em ${shortDate}`}
+        title="Crop Cycle"
+        subtitle={`${cropName} — starting ${shortDate}`}
         backHref={previsaoBack}
       />
 
@@ -66,13 +66,13 @@ function CicloContent() {
         {loading ? (
           <div className="flex flex-col items-center gap-3 py-16">
             <Spinner />
-            <span className="text-[13px] text-[#6b7280]">Carregando ciclo…</span>
+            <span className="text-[13px] text-[#6b7280]">Loading cycle…</span>
           </div>
         ) : error ? (
           <p className="text-[13px] text-[#c01b1b] bg-[#ffebeb] rounded-lg px-3 py-2">{error}</p>
         ) : phases.length === 0 ? (
           <p className="text-[14px] text-[#6b7280] text-center py-8">
-            Nenhuma fase disponível para esta análise.
+            No phases available for this analysis.
           </p>
         ) : (
           <>
@@ -91,7 +91,7 @@ function CicloContent() {
                 <PhaseCard
                   key={phase.id}
                   name={phase.name}
-                  duration={`Dias ${phase.start_day + 1}–${phase.end_day + 1}`}
+                  duration={`Days ${phase.start_day + 1}–${phase.end_day + 1}`}
                   status={risk}
                   progressPercent={score}
                   progressColor={color}
@@ -104,9 +104,9 @@ function CicloContent() {
 
             <a
               href="/"
-              className="w-full bg-[#0e8038] text-white py-3.5 px-5 rounded-xl text-[15px] font-semibold leading-none text-center block"
+              className="w-full bg-[#0e8038] text-white py-3.5 px-5 rounded-xl text-[15px] font-semibold leading-none text-center block transition active:scale-[0.97]"
             >
-              Fazer nova análise
+              New analysis
             </a>
           </>
         )}

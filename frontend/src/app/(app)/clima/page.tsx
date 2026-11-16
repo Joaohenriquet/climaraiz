@@ -39,14 +39,14 @@ function buildChartData(indicator: TrendIndicator): ChartPoint[] {
 }
 
 function formatPValue(p: number): string {
-  if (p < 0.001) return '<0,001'
-  return p.toFixed(4).replace('.', ',')
+  if (p < 0.001) return '<0.001'
+  return p.toFixed(4)
 }
 
 function formatSlope(slope: number, unit: 'mm' | 'degC'): string {
   const sign = slope > 0 ? '+' : ''
-  if (unit === 'degC') return `${sign}${slope.toFixed(2).replace('.', ',')}°C por década`
-  return `${sign}${slope.toFixed(2).replace('.', ',')} mm por década`
+  if (unit === 'degC') return `${sign}${slope.toFixed(2)}°C per decade`
+  return `${sign}${slope.toFixed(2)} mm per decade`
 }
 
 const YEAR_TICKS = [2001, 2005, 2010, 2015, 2020, 2025]
@@ -81,7 +81,7 @@ export default function ClimaPage() {
   useEffect(() => {
     getClimateTrends(MUNICIPALITY_ID)
       .then(setTrends)
-      .catch(() => setError('Erro ao carregar dados climáticos.'))
+      .catch(() => setError('Failed to load climate data.'))
       .finally(() => setLoading(false))
   }, [])
 
@@ -101,13 +101,13 @@ export default function ClimaPage() {
   const pValue = activeInd?.significance?.p_value ?? 1
   const significant = pValue < 0.05
   const slopeText = formatSlope(slope, tab === 'temp' ? 'degC' : 'mm')
-  const pText = `p-valor = ${formatPValue(pValue)}`
+  const pText = `p-value = ${formatPValue(pValue)}`
 
   const mean = activeInd?.mean ?? 0
   const meanBadge =
     tab === 'precip'
-      ? `Média ${Math.round(mean)}mm`
-      : `Média ${mean.toFixed(1).replace('.', ',')}°C`
+      ? `Mean ${Math.round(mean)}mm`
+      : `Mean ${mean.toFixed(1)}°C`
 
   const precip = precipInd
   const temp = tempInd
@@ -116,7 +116,7 @@ export default function ClimaPage() {
     <>
       <header className="bg-[#1b4132] flex flex-col gap-1 pb-5 pt-4 px-5 shrink-0">
         <span className="text-white text-[17px] font-semibold leading-none">
-          Tendências climáticas
+          Climate Trends
         </span>
         <div className="bg-[rgba(255,255,255,0.10)] self-start px-2.5 py-1 rounded-full mt-0.5">
           <span className="text-[rgba(255,255,255,0.85)] text-[11px] font-medium leading-none">
@@ -131,7 +131,7 @@ export default function ClimaPage() {
           <div className="flex-1 flex items-center justify-center py-16">
             <div className="flex flex-col items-center gap-3">
               <Spinner />
-              <span className="text-[13px] text-[#6b7280]">Carregando dados climáticos…</span>
+              <span className="text-[13px] text-[#6b7280]">Loading climate data…</span>
             </div>
           </div>
         ) : error ? (
@@ -139,13 +139,13 @@ export default function ClimaPage() {
         ) : (
           <>
             <p className="text-[#9ca3af] text-[10px] font-medium tracking-[0.5px] uppercase">
-              Resumo das variáveis
+              Variable summary
             </p>
 
             <div className="flex gap-2 w-full">
               <SummaryCard
                 iconSrc="/icons/precip-icon.svg"
-                label="Precipitação"
+                label="Precipitation"
                 slope={precip?.trend?.slope_per_decade ?? 0}
                 unit="mm"
                 pValue={precip?.significance?.p_value ?? 1}
@@ -157,7 +157,7 @@ export default function ClimaPage() {
               />
               <SummaryCard
                 iconSrc="/icons/temp-icon.svg"
-                label="Temperatura"
+                label="Temperature"
                 slope={temp?.trend?.slope_per_decade ?? 0}
                 unit="°C"
                 pValue={temp?.significance?.p_value ?? 1}
@@ -170,7 +170,7 @@ export default function ClimaPage() {
             </div>
 
             <p className="text-[#9ca3af] text-[10px] font-medium tracking-[0.5px] uppercase">
-              Análise histórica
+              Historical analysis
             </p>
 
             <div className="bg-[#e5e7eb] flex gap-0.5 p-0.5 rounded-lg w-full">
@@ -185,7 +185,7 @@ export default function ClimaPage() {
                       : 'text-[#6b7280] font-medium',
                   ].join(' ')}
                 >
-                  {t === 'precip' ? 'Precipitação' : 'Temperatura'}
+                  {t === 'precip' ? 'Precipitation' : 'Temperature'}
                 </button>
               ))}
             </div>
@@ -194,7 +194,7 @@ export default function ClimaPage() {
               <div className="flex items-center justify-between">
                 <div className="flex flex-col gap-0.5">
                   <span className="text-[#111827] text-[13px] font-semibold leading-none">
-                    {tab === 'precip' ? 'Precipitação anual' : 'Temperatura média anual'}
+                    {tab === 'precip' ? 'Annual precipitation' : 'Mean annual temperature'}
                   </span>
                   <span className="text-[#9ca3af] text-[11px] leading-none">
                     2001–2025 · NASA/MERRA-2
@@ -260,7 +260,7 @@ export default function ClimaPage() {
                 <div className="flex items-center gap-1">
                   <div className="size-2 rounded-sm" style={{ backgroundColor: tab === 'precip' ? '#22c55e' : '#f59e0b' }} />
                   <span className="text-[#6b7280] text-[9px] leading-none">
-                    {tab === 'precip' ? 'Barras anuais' : 'Série histórica'}
+                    {tab === 'precip' ? 'Annual bars' : 'Historical series'}
                   </span>
                 </div>
                 <div className="flex items-center gap-1">
@@ -269,13 +269,13 @@ export default function ClimaPage() {
                 </div>
                 <div className="flex items-center gap-1">
                   <div className="h-px w-3.5" style={{ backgroundColor: 'rgba(156,163,175,0.6)' }} />
-                  <span className="text-[#6b7280] text-[9px] leading-none">Média</span>
+                  <span className="text-[#6b7280] text-[9px] leading-none">Mean</span>
                 </div>
               </div>
             </div>
 
             <p className="text-[#9ca3af] text-[10px] font-medium tracking-[0.5px] uppercase">
-              O que mudou no clima?
+              What changed in the climate?
             </p>
 
             <div
@@ -294,7 +294,7 @@ export default function ClimaPage() {
                   className="shrink-0"
                 />
                 <span className="text-[#111827] text-[13px] font-semibold leading-none">
-                  Tendência geral da região
+                  Regional trend
                 </span>
               </div>
               <p
@@ -302,12 +302,12 @@ export default function ClimaPage() {
                 style={{ color: tab === 'precip' ? '#384051' : '#59400d' }}
               >
                 {tab === 'precip'
-                  ? 'A precipitação anual apresentou tendência de '
-                  : 'A temperatura média anual apresentou tendência de '}
+                  ? 'Annual precipitation showed a trend of '
+                  : 'Mean annual temperature showed a trend of '}
                 <strong style={{ color: tab === 'precip' ? '#111827' : '#b26301' }}>
                   {slopeText} ({pText})
                 </strong>
-                {significant ? ', com significância estatística.' : ', sem significância estatística.'}
+                {significant ? ', with statistical significance.' : ', without statistical significance.'}
               </p>
             </div>
 
@@ -346,10 +346,10 @@ function SummaryCard({
   const sign = slope > 0 ? '+' : ''
   const slopeFormatted =
     unit === '°C'
-      ? `${sign}${slope.toFixed(2).replace('.', ',')}${unit}`
+      ? `${sign}${slope.toFixed(2)}${unit}`
       : `${sign}${Math.round(slope)}`
-  const pFormatted = `p=${pValue.toFixed(3).replace('.', ',')}`
-  const dirLabel = slope > 0 ? (direction === 'up' ? '↑ Aumento' : '↓ Redução') : '↓ Redução'
+  const pFormatted = `p=${pValue.toFixed(3)}`
+  const dirLabel = slope > 0 ? (direction === 'up' ? '↑ Increase' : '↓ Decrease') : '↓ Decrease'
 
   return (
     <div className="bg-white border border-[#e5e7eb] rounded-xl flex flex-col gap-1.5 items-center px-2.5 py-3 flex-1 min-w-0">
@@ -364,7 +364,7 @@ function SummaryCard({
       </div>
       <span className="text-[#111827] text-base font-bold leading-none">{slopeFormatted}</span>
       {unit !== '°C' && (
-        <span className="text-[#9ca3af] text-[9px] leading-none">mm/déc.</span>
+        <span className="text-[#9ca3af] text-[9px] leading-none">mm/dec.</span>
       )}
       <div className="px-1 py-0.5 rounded" style={{ backgroundColor: badgeBg }}>
         <span className="text-[8px] font-medium leading-none" style={{ color: slopeColor }}>
@@ -375,7 +375,7 @@ function SummaryCard({
         className="text-[8px] font-medium text-center leading-none"
         style={{ color: significant ? slopeColor : '#6b7280' }}
       >
-        {significant ? 'Significativo' : 'Não Sig.'}
+        {significant ? 'Significant' : 'Not sig.'}
       </span>
     </div>
   )

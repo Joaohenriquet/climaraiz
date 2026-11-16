@@ -39,7 +39,7 @@ export default function InicioPage() {
         if (options.length > 0) setSelectedCropId(options[0].value)
         setTrends(fetchedTrends)
       } catch {
-        setError('Não foi possível conectar ao servidor. Verifique se o backend está rodando.')
+        setError('Could not connect to the server. Make sure the backend is running.')
       } finally {
         setLoadingData(false)
       }
@@ -69,7 +69,7 @@ export default function InicioPage() {
         `/janelas?analysis_id=${result.analysis_id}&crop_id=${cropId}&crop_name=${encodeURIComponent(cropName)}`
       )
     } catch {
-      setError('Erro ao iniciar análise. Tente novamente.')
+      setError('Failed to start analysis. Please try again.')
     }
   }
 
@@ -100,21 +100,21 @@ export default function InicioPage() {
           <span className="text-white text-[20px] font-bold leading-none">ClimaRaiz</span>
         </div>
         <p className="text-[13px] text-[rgba(34,197,94,0.75)] leading-none">
-          Planejamento agrícola com dados climáticos
+          Agricultural planning with climate data
         </p>
       </header>
 
       <main className="flex-1 flex flex-col gap-4 bg-[#f3f4f6] px-4 py-6 overflow-y-auto">
 
         <h1 className="text-[18px] font-semibold leading-snug text-[#111827]">
-          Quando plantar?
+          When to plant?
         </h1>
         <p className="text-[14px] text-[#6b7280] leading-5">
-          Use dados climáticos históricos para encontrar as melhores janelas de plantio.
+          Use historical climate data to find the best planting windows.
         </p>
 
         <SelectField
-          label="MUNICÍPIO"
+          label="MUNICIPALITY"
           options={MUNICIPIO_OPTIONS}
           value={String(MUNICIPALITY_ID)}
           onChange={() => {}}
@@ -124,11 +124,11 @@ export default function InicioPage() {
         {loadingData ? (
           <div className="bg-white border border-[#e5e7eb] rounded-xl px-3.5 py-3 flex items-center gap-2">
             <Spinner className="w-auto h-auto" />
-            <span className="text-[14px] text-[#6b7280]">Carregando culturas…</span>
+            <span className="text-[14px] text-[#6b7280]">Loading crops…</span>
           </div>
         ) : (
           <SelectField
-            label="CULTURA"
+            label="CROP"
             options={cropOptions}
             value={selectedCropId}
             onChange={setSelectedCropId}
@@ -147,13 +147,13 @@ export default function InicioPage() {
         <button
           onClick={handleStart}
           disabled={loadingData || !selectedCropId}
-          className="w-full bg-[#0e8038] text-white py-3.5 px-5 rounded-xl text-[15px] font-semibold leading-none active:opacity-90 transition-opacity text-center disabled:opacity-60"
+          className="w-full bg-[#0e8038] text-white py-3.5 px-5 rounded-xl text-[15px] font-semibold leading-none transition active:scale-[0.97] text-center disabled:opacity-60"
         >
-          Iniciar
+          Start
         </button>
 
         <p className="type-label text-[#9ca3af]">
-          DADOS CLIMÁTICOS — CAMPINA GRANDE
+          CLIMATE DATA — CAMPINA GRANDE
         </p>
 
         {loadingData ? (
@@ -164,9 +164,9 @@ export default function InicioPage() {
           </div>
         ) : (
           <div className="flex gap-2">
-            <StatCard value={tempValue}   valueColor="#f59e0b" label="Temp. média" />
-            <StatCard value={precipValue} valueColor="#3b82f6" label="Precip. média" />
-            <StatCard value={trendValue}  valueColor={trendColor} label="Tendência/déc." />
+            <StatCard value={tempValue}   valueColor="#f59e0b" label="Avg. temp." />
+            <StatCard value={precipValue} valueColor="#3b82f6" label="Avg. precip." />
+            <StatCard value={trendValue}  valueColor={trendColor} label="Trend/dec." />
           </div>
         )}
       </main>
